@@ -1,0 +1,94 @@
+post:
+  tags:
+    - Customer
+  summary: Create customer
+  description: >-
+    This method adds a customer to the Jira Service Management instance by
+    passing a JSON file including an email address and display name. The display
+    name does not need to be unique. The record's identifiers, `name` and `key`,
+    are automatically generated from the request details.
+
+
+    **[Permissions](#permissions) required**: Jira Administrator Global
+    permission
+  operationId: createCustomer
+  parameters:
+    - name: strictConflictStatusCode
+      in: query
+      description: >-
+        Optional boolean flag to return 409 Conflict status code for duplicate
+        customer creation request
+      schema:
+        type: boolean
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/CustomerCreateDTO.yaml
+        example:
+          displayName: Fred F. User
+          email: fred@example.com
+    required: true
+  responses:
+    '201':
+      description: Returns the customer details.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/UserDTO.yaml
+          example: >-
+            {"accountId":"qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","name":"qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","key":"qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","emailAddress":"fred@example.com","displayName":"Fred
+            F.
+            User","active":true,"timeZone":"Australia/Sydney","_links":{"jiraRest":"https://your-domain.atlassian.net/rest/api/2/user?username=qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","avatarUrls":{"48x48":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=48&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue","24x24":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=24&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D24%26noRedirect%3Dtrue","16x16":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=16&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D16%26noRedirect%3Dtrue","32x32":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=32&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D32%26noRedirect%3Dtrue"},"self":"https://your-domain.atlassian.net/rest/api/2/user?username=qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b"}}
+    '400':
+      description: >-
+        Returned if the request is invalid, either because the email address is
+        incorrectly formed or already exists in the database if
+        `strictConflictStatusCode=false` or if `strictConflictStatusCode`
+        parameter is not provided
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '409':
+      description: >-
+        Returned if the request is invalid because the email address already
+        exists in the database and `strictConflictStatusCode=true`
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - manage:servicedesk-customer
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - manage:servicedesk-customer
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:customer:jira-service-management
+        - write:customer:jira-service-management
+        - read:user:jira
+  x-atlassian-connect-scope: ADMIN

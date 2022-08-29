@@ -1,0 +1,193 @@
+get:
+  tags:
+    - Request
+  summary: Get subscription status
+  description: >-
+    This method returns the notification subscription status of the user making
+    the request. Use this method to determine if the user is subscribed to a
+    customer request's notifications.
+
+
+    **[Permissions](#permissions) required**: Permission to view the customer
+    request.
+  operationId: getSubscriptionStatus
+  parameters:
+    - name: issueIdOrKey
+      in: path
+      description: >-
+        The ID or key of the customer request to be queried for subscription
+        status.
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Returns the status of the notification subscription.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/RequestNotificationSubscriptionDTO.yaml
+          example: '{"subscribed":true}'
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the customer request does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - read:servicedesk-request
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - read:servicedesk-request
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:request.notification:jira-service-management
+        - read:user:jira
+  x-atlassian-connect-scope: READ
+put:
+  tags:
+    - Request
+  summary: Subscribe
+  description: >-
+    This method subscribes the user to receiving notifications from a customer
+    request.
+
+
+    **[Permissions](#permissions) required**: Permission to view the customer
+    request.
+  operationId: subscribe
+  parameters:
+    - name: issueIdOrKey
+      in: path
+      description: The ID or key of the customer request to be subscribed to.
+      required: true
+      schema:
+        type: string
+  responses:
+    '204':
+      description: Returns if the user was subscribed.
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the customer request does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - write:servicedesk-request
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - write:servicedesk-request
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:request.notification:jira-service-management
+        - write:request.notification:jira-service-management
+        - read:user:jira
+  x-atlassian-connect-scope: WRITE
+delete:
+  tags:
+    - Request
+  summary: Unsubscribe
+  description: >-
+    This method unsubscribes the user from notifications from a customer
+    request.
+
+
+    **[Permissions](#permissions) required**: Permission to view the customer
+    request.
+  operationId: unsubscribe
+  parameters:
+    - name: issueIdOrKey
+      in: path
+      description: The ID or key of the customer request to be unsubscribed from.
+      required: true
+      schema:
+        type: string
+  responses:
+    '204':
+      description: Returns if the user was unsubscribed.
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the customer request does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - write:servicedesk-request
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - write:servicedesk-request
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:request.notification:jira-service-management
+        - delete:request.notification:jira-service-management
+        - read:user:jira
+  x-atlassian-connect-scope: WRITE

@@ -1,0 +1,102 @@
+get:
+  tags:
+    - Request
+  summary: Get customer request by id or key
+  description: >-
+    This method returns a customer request.
+
+
+    **[Permissions](#permissions) required**: Permission to access the specified
+    service desk.
+
+
+    **Response limitations**: For customers, only a request they created, was
+    created on their behalf, or they are participating in will be returned.
+  operationId: getCustomerRequestByIdOrKey
+  parameters:
+    - name: issueIdOrKey
+      in: path
+      description: The ID or Key of the customer request to be returned
+      required: true
+      schema:
+        type: string
+    - name: expand
+      in: query
+      description: >-
+        A multi-value parameter indicating which properties of the customer
+        request to expand, where:
+
+         *  `serviceDesk` returns additional service desk details.
+         *  `requestType` returns additional customer request type details.
+         *  `participant` returns the participant details.
+         *  `sla` returns the SLA information.
+         *  `status` returns the status transitions, in chronological order.
+         *  `attachment` returns the attachments.
+         *  `action` returns the actions that the user can or cannot perform.
+         *  `comment` returns the comments.
+         *  `comment.attachment` returns the attachment details for each comment.
+         *  `comment.renderedBody` (Experimental) return the rendered body in HTML format (in addition to the raw body) for each comment.
+      schema:
+        type: array
+        items:
+          type: string
+  responses:
+    '200':
+      description: Returns the customer request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/CustomerRequestDTO.yaml
+          example: >-
+            {"_expands":["participant","status","sla","requestType","serviceDesk","attachment","action","comment"],"issueId":"107001","issueKey":"HELPDESK-1","requestTypeId":"25","serviceDeskId":"10","createdDate":{"iso8601":"2015-10-08T14:42:00+0700","jira":"2015-10-08T14:42:00.000+0700","friendly":"Monday
+            14:42
+            PM","epochMillis":1444290120000},"reporter":{"accountId":"qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","name":"qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","key":"qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","emailAddress":"fred@example.com","displayName":"Fred
+            F.
+            User","active":true,"timeZone":"Australia/Sydney","_links":{"jiraRest":"https://your-domain.atlassian.net/rest/api/2/user?username=qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","avatarUrls":{"48x48":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=48&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue","24x24":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=24&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D24%26noRedirect%3Dtrue","16x16":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=16&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D16%26noRedirect%3Dtrue","32x32":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=32&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D32%26noRedirect%3Dtrue"},"self":"https://your-domain.atlassian.net/rest/api/2/user?username=qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b"}},"requestFieldValues":[{"fieldId":"summary","label":"What
+            do you need?","value":"Request JSD help via
+            REST"},{"fieldId":"description","label":"Why do you need
+            this?","value":"I need a new *mouse* for my
+            Mac","renderedValue":{"html":"<p>I need a new <b>mouse</b> for my
+            Mac</p>"}}],"currentStatus":{"status":"Waiting for
+            Support","statusCategory":"NEW","statusDate":{"iso8601":"2015-10-08T14:01:00+0700","jira":"2015-10-08T14:01:00.000+0700","friendly":"Today
+            14:01
+            PM","epochMillis":1444287660000}},"_links":{"jiraRest":"https://your-domain.atlassian.net/rest/api/2/issue/107001","web":"https://your-domain.atlassian.net/servicedesk/customer/portal/10/HELPDESK-1","self":"https://your-domain.atlassian.net/rest/servicedeskapi/request/107001","agent":"https://your-domain.atlassian.net/browse/HELPDESK-1"}}
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the customer request does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - read:servicedesk-request
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - read:servicedesk-request
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:request:jira-service-management
+        - read:user:jira
+  x-atlassian-connect-scope: READ

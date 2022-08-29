@@ -1,0 +1,91 @@
+get:
+  tags:
+    - Request
+  summary: Get attachment thumbnail
+  description: >-
+    Returns the thumbnail of an attachment.
+
+
+    To return the attachment contents, use
+    [servicedeskapi/request/\{issueIdOrKey\}/attachment/\{attachmentId\}](#api-rest-servicedeskapi-request-issueidorkey-attachment-attachmentid-get).
+
+
+    **[Permissions](#permissions) required:** For the issue containing the
+    attachment:
+
+     *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
+     *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  operationId: getAttachmentThumbnail
+  parameters:
+    - name: issueIdOrKey
+      in: path
+      description: The ID or key for the customer request the attachment is associated with
+      required: true
+      schema:
+        type: string
+    - name: attachmentId
+      in: path
+      description: The ID of the attachment.
+      required: true
+      schema:
+        type: integer
+        format: int64
+  responses:
+    '200':
+      description: 200 response
+      content:
+        application/json:
+          schema: {}
+    '303':
+      description: >-
+        Returned if the request is successful. See the `Location` header for the
+        download URL.
+    '400':
+      description: Returned if the request is invalid.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '401':
+      description: Returned if the authentication credentials are incorrect.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: The user does not have the necessary permission.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: |-
+        Returned if:
+
+         *  the attachment is not found.
+         *  attachments are disabled in the Jira settings.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - read:servicedesk-request
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - read:servicedesk-request
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:request.attachment:jira-service-management
+        - read:user:jira
+  x-atlassian-connect-scope: READ

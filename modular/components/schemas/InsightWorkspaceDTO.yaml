@@ -1,0 +1,7 @@
+type: object
+properties:
+  workspaceId:
+    type: string
+    description: The workspace ID used as the identifier to access the Insight REST API.
+additionalProperties: false
+description: Details of an insight workspace ID.

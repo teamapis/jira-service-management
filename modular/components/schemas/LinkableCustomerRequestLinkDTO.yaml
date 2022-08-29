@@ -1,0 +1,5 @@
+type: object
+properties:
+  _links:
+    $ref: ./CustomerRequestLinkDTO.yaml
+additionalProperties: false

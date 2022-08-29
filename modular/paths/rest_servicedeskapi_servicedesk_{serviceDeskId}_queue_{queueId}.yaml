@@ -1,0 +1,89 @@
+get:
+  tags:
+    - Servicedesk
+  summary: Get queue
+  description: >-
+    This method returns a specific queues in a service desk. To include a
+    customer request count for the queue (in the `issueCount` field) in the
+    response, set the query parameter `includeCount` to true (its default is
+    false).
+
+
+    **[Permissions](#permissions) required**: service desk's Agent.
+  operationId: getQueue
+  parameters:
+    - name: serviceDeskId
+      in: path
+      description: >-
+        ID of the service desk whose queues will be returned. This can
+        alternatively be a [project identifier.](#project-identifiers)
+      required: true
+      schema:
+        type: string
+    - name: queueId
+      in: path
+      description: ID of the required queue.
+      required: true
+      schema:
+        type: integer
+        format: int64
+    - name: includeCount
+      in: query
+      description: >-
+        Specifies whether to include each queue's customer request (issue) count
+        in the response.
+      schema:
+        type: boolean
+        default: false
+  responses:
+    '200':
+      description: Returns the specific queue of the service desk.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/QueueDTO.yaml
+          example: >-
+            {"id":"20","name":"Assigned to me","jql":"project = SD AND assignee
+            = currentUser() AND resolution = Unresolved ORDER BY \"Time to
+            resolution\"
+            ASC","fields":["issuetype","issuekey","summary","created","reporter","duedate"],"issueCount":10,"_links":{"self":"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/1/queue/20"}}
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the service desk does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - read:jira-work
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - read:jira-work
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:queue:jira-service-management
+        - read:user:jira
+        - read:jql:jira
+  x-atlassian-connect-scope: READ

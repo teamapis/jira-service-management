@@ -1,0 +1,11 @@
+type: object
+properties:
+  comment:
+    description: Details of the comment included with the attachments.
+    allOf:
+      - $ref: ./CommentDTO.yaml
+  attachments:
+    description: List of the attachments added.
+    allOf:
+      - $ref: ./PagedDTOAttachmentDTO.yaml
+additionalProperties: false

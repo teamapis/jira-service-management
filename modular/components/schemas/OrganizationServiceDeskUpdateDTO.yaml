@@ -1,0 +1,11 @@
+required:
+  - organizationId
+type: object
+properties:
+  organizationId:
+    type: integer
+    description: >-
+      List of organizations, specified by 'ID' field values, to add to or remove
+      from the service desk.
+    format: int32
+additionalProperties: false

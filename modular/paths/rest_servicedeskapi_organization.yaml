@@ -1,0 +1,164 @@
+get:
+  tags:
+    - Organization
+  summary: Get organizations
+  description: >-
+    This method returns a list of organizations in the Jira Service Management
+    instance. Use this method when you want to present a list of organizations
+    or want to locate an organization by name.
+
+
+    **[Permissions](#permissions) required**: Any. However, to fetch
+    organizations based on `accountId` the user must have a Service Desk agent
+    license.
+
+
+    **Response limitations**: If the user is a customer, only those
+    organizations of which the customer is a member are listed.
+  operationId: getOrganizations
+  parameters:
+    - name: start
+      in: query
+      description: >-
+        The starting index of the returned objects. Base index: 0. See the
+        [Pagination](#pagination) section for more details.
+      schema:
+        type: integer
+        format: int32
+    - name: limit
+      in: query
+      description: >-
+        The maximum number of organizations to return per page. Default: 50. See
+        the [Pagination](#pagination) section for more details.
+      schema:
+        type: integer
+        format: int32
+    - name: accountId
+      in: query
+      description: >-
+        The account ID of the user, which uniquely identifies the user across
+        all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Returns paginated list of organizations.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/PagedDTOOrganizationDTO.yaml
+          example: >-
+            {"_expands":[],"size":1,"start":1,"limit":1,"isLastPage":false,"_links":{"base":"https://your-domain.atlassian.net/rest/servicedeskapi","context":"context","next":"https://your-domain.atlassian.net/rest/servicedeskapi/organization?start=2&limit=1","prev":"https://your-domain.atlassian.net/rest/servicedeskapi/organization?start=0&limit=1"},"values":[{"id":"1","name":"Charlie
+            Cakes
+            Franchises","_links":{"self":"https://your-domain.atlassian.net/rest/servicedeskapi/organization/1"}}]}
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have the necessary permission.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the user is not found.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - manage:servicedesk-customer
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - manage:servicedesk-customer
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:organization:jira-service-management
+  x-atlassian-connect-scope: READ
+post:
+  tags:
+    - Organization
+  summary: Create organization
+  description: >-
+    This method creates an organization by passing the name of the organization.
+
+
+    **[Permissions](#permissions) required**: Service desk administrator or
+    agent. Note: Permission to create organizations can be switched to users
+    with the Jira administrator permission, using the **[Organization
+    management](https://confluence.atlassian.com/servicedeskcloud/setting-up-service-desk-users-732528877.html#Settingupservicedeskusers-manageorgsManageorganizations)**
+    feature.
+  operationId: createOrganization
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/OrganizationCreateDTO.yaml
+        example:
+          name: Charlie Cakes Franchises
+    required: true
+  responses:
+    '201':
+      description: >-
+        Returns the created organization or the existing organization if name
+        already exists.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/OrganizationDTO.yaml
+          example: >-
+            {"id":"1","name":"Charlie Cakes
+            Franchises","_links":{"self":"https://your-domain.atlassian.net/rest/servicedeskapi/organization/1"}}
+    '400':
+      description: Returned if the HTTP request is invalid.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - manage:servicedesk-customer
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - manage:servicedesk-customer
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:organization:jira-service-management
+        - write:organization:jira-service-management
+  x-atlassian-connect-scope: ADMIN

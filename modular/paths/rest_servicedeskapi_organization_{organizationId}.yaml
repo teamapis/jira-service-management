@@ -1,0 +1,134 @@
+get:
+  tags:
+    - Organization
+  summary: Get organization
+  description: >-
+    This method returns details of an organization. Use this method to get
+    organization details whenever your application component is passed an
+    organization ID but needs to display other organization details.
+
+
+    **[Permissions](#permissions) required**: Any
+
+
+    **Response limitations**: Customers can only retrieve organization of which
+    they are members.
+  operationId: getOrganization
+  parameters:
+    - name: organizationId
+      in: path
+      description: The ID of the organization.
+      required: true
+      schema:
+        type: integer
+        format: int32
+  responses:
+    '200':
+      description: Returns the requested organization.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/OrganizationDTO.yaml
+          example: >-
+            {"id":"1","name":"Charlie Cakes
+            Franchises","_links":{"self":"https://your-domain.atlassian.net/rest/servicedeskapi/organization/1"}}
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the organization does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - manage:servicedesk-customer
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - manage:servicedesk-customer
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:organization:jira-service-management
+  x-atlassian-connect-scope: READ
+delete:
+  tags:
+    - Organization
+  summary: Delete organization
+  description: >-
+    This method deletes an organization. Note that the organization is deleted
+    regardless of other associations it may have. For example, associations with
+    service desks.
+
+
+    **[Permissions](#permissions) required**: Jira administrator.
+  operationId: deleteOrganization
+  parameters:
+    - name: organizationId
+      in: path
+      description: The ID of the organization.
+      required: true
+      schema:
+        type: integer
+        format: int32
+  responses:
+    '204':
+      description: Returned if the organization was deleted.
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the organization does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - manage:servicedesk-customer
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - manage:servicedesk-customer
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:organization:jira-service-management
+        - delete:organization:jira-service-management
+  x-atlassian-connect-scope: DELETE

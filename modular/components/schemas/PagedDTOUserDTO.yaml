@@ -1,0 +1,33 @@
+type: object
+properties:
+  size:
+    type: integer
+    description: Number of items returned in the page.
+    format: int32
+  start:
+    type: integer
+    description: Index of the first item returned in the page.
+    format: int32
+  limit:
+    type: integer
+    description: >-
+      Number of items to be returned per page, up to the maximum set for these
+      objects in the current implementation.
+    format: int32
+  isLastPage:
+    type: boolean
+    description: Indicates if this is the last page of records (true) or not (false).
+  values:
+    type: array
+    description: Details of the items included in the page.
+    items:
+      $ref: ./UserDTO.yaml
+  _expands:
+    type: array
+    items:
+      type: string
+  _links:
+    description: List of the links relating to the page.
+    allOf:
+      - $ref: ./PagedLinkDTO.yaml
+additionalProperties: false

@@ -1,0 +1,14 @@
+type: object
+properties:
+  fieldId:
+    type: string
+    description: ID of the field.
+  label:
+    type: string
+    description: Text label for the field.
+  value:
+    description: Value of the field.
+  renderedValue:
+    type: object
+    description: Value of the field rendered in the UI.
+additionalProperties: false

@@ -1,0 +1,18 @@
+type: object
+properties:
+  self:
+    type: string
+    format: uri
+  jiraRest:
+    type: string
+    description: REST API URL for the attachment
+    format: uri
+  content:
+    type: string
+    description: URL for the attachment.
+    format: uri
+  thumbnail:
+    type: string
+    description: URL for the attachment's thumbnail image.
+    format: uri
+additionalProperties: false

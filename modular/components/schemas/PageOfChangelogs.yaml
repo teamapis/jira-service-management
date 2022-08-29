@@ -1,0 +1,25 @@
+type: object
+properties:
+  startAt:
+    type: integer
+    description: The index of the first item returned on the page.
+    format: int32
+    readOnly: true
+  maxResults:
+    type: integer
+    description: The maximum number of results that could be on the page.
+    format: int32
+    readOnly: true
+  total:
+    type: integer
+    description: The number of results on the page.
+    format: int32
+    readOnly: true
+  histories:
+    type: array
+    description: The list of changelogs.
+    readOnly: true
+    items:
+      $ref: ./Changelog.yaml
+additionalProperties: false
+description: A page of changelogs.

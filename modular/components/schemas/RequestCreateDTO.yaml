@@ -1,0 +1,30 @@
+type: object
+properties:
+  serviceDeskId:
+    type: string
+    description: ID of the service desk in which to create the request.
+  requestTypeId:
+    type: string
+    description: ID of the request type for the request.
+  requestFieldValues:
+    type: object
+    additionalProperties: {}
+    description: >-
+      JSON map of Jira field IDs and their values representing the content of
+      the request.
+  requestParticipants:
+    type: array
+    description: >-
+      List of customers to participate in the request, as a list of `accountId`
+      values.
+    items:
+      type: string
+  raiseOnBehalfOf:
+    type: string
+    description: >-
+      The `accountId` of the customer that the request is being raised on behalf
+      of.
+  channel:
+    type: string
+    description: (Experimental) Shows extra information for the request channel.
+additionalProperties: false

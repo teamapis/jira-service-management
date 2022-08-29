@@ -1,0 +1,248 @@
+get:
+  tags:
+    - Organization
+  summary: Get property
+  description: >-
+    Returns the value of a property from an organization. Use this method to
+    obtain the JSON content for an organization's property.
+
+
+    **[Permissions](#permissions) required**: Any
+
+
+    **Response limitations**: Customers can only access properties of
+    organizations of which they are members.
+  operationId: getProperty
+  parameters:
+    - name: organizationId
+      in: path
+      description: The ID of the organization from which the property will be returned.
+      required: true
+      schema:
+        type: string
+    - name: propertyKey
+      in: path
+      description: The key of the property to return.
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Returns the organization's property.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/EntityProperty.yaml
+          example: >-
+            {"key":"organization.attributes","value":{"phone":"0800-1233456789","mail":"charlie@example.com"}}
+    '400':
+      description: Returned if the organization ID is invalid.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the organization or property do not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - manage:servicedesk-customer
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - manage:servicedesk-customer
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:organization.property:jira-service-management
+  x-atlassian-connect-scope: INACCESSIBLE
+put:
+  tags:
+    - Organization
+  summary: Set property
+  description: >-
+    Sets the value of a property for an organization. Use this resource to store
+    custom data against an organization.
+
+
+    **[Permissions](#permissions) required**: Service Desk Administrator or
+    Agent.
+
+
+    Note: Permission to manage organizations can be switched to users with the
+    Jira administrator permission, using the **[Organization
+    management](https://confluence.atlassian.com/servicedeskcloud/setting-up-service-desk-users-732528877.html#Settingupservicedeskusers-manageorgsManageorganizations)**
+    feature.
+  operationId: setProperty
+  parameters:
+    - name: organizationId
+      in: path
+      description: The ID of the organization on which the property will be set.
+      required: true
+      schema:
+        type: string
+    - name: propertyKey
+      in: path
+      description: >-
+        The key of the organization's property. The maximum length of the key is
+        255 bytes.
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Returned if the organization property was updated.
+      content:
+        application/json:
+          schema: {}
+    '201':
+      description: Returned if the organization property was created.
+      content:
+        application/json:
+          schema: {}
+    '400':
+      description: Returned if the organization ID is invalid.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the organization does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - manage:servicedesk-customer
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - manage:servicedesk-customer
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:organization.property:jira-service-management
+        - write:organization.property:jira-service-management
+  x-atlassian-connect-scope: INACCESSIBLE
+delete:
+  tags:
+    - Organization
+  summary: Delete property
+  description: >-
+    Removes a property from an organization.
+
+
+    **[Permissions](#permissions) required**: Service Desk Administrator or
+    Agent.
+
+
+    Note: Permission to manage organizations can be switched to users with the
+    Jira administrator permission, using the **[Organization
+    management](https://confluence.atlassian.com/servicedeskcloud/setting-up-service-desk-users-732528877.html#Settingupservicedeskusers-manageorgsManageorganizations)**
+    feature.
+  operationId: deleteProperty
+  parameters:
+    - name: organizationId
+      in: path
+      description: The ID of the organization from which the property will be removed.
+      required: true
+      schema:
+        type: string
+    - name: propertyKey
+      in: path
+      description: The key of the property to remove.
+      required: true
+      schema:
+        type: string
+  responses:
+    '204':
+      description: Returned if the organization property was removed.
+    '400':
+      description: Returned if the organization ID is invalid.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the organization or property do not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - manage:servicedesk-customer
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - manage:servicedesk-customer
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:organization.property:jira-service-management
+        - delete:organization.property:jira-service-management
+  x-atlassian-connect-scope: INACCESSIBLE

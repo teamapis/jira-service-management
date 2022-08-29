@@ -1,0 +1,14 @@
+type: object
+properties:
+  value:
+    type: string
+    description: Value of the field.
+  label:
+    type: string
+    description: Label for the field.
+  children:
+    type: array
+    description: List of child fields.
+    items:
+      $ref: ./RequestTypeFieldValueDTO.yaml
+additionalProperties: false

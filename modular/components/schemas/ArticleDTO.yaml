@@ -1,0 +1,15 @@
+type: object
+properties:
+  title:
+    type: string
+    description: Title of the article.
+  excerpt:
+    type: string
+    description: Excerpt of the article which matches the given query string.
+  source:
+    description: Source of the article.
+    allOf:
+      - $ref: ./SourceDTO.yaml
+  content:
+    $ref: ./ContentDTO.yaml
+additionalProperties: false

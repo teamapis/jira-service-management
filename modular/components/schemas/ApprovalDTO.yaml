@@ -1,0 +1,38 @@
+type: object
+properties:
+  id:
+    type: string
+    description: ID of the approval.
+  name:
+    type: string
+    description: Description of the approval being sought or provided.
+  finalDecision:
+    type: string
+    description: Outcome of the approval, based on the approvals provided by all approvers.
+    enum:
+      - approved
+      - declined
+      - pending
+  canAnswerApproval:
+    type: boolean
+    description: >-
+      Indicates whether the user making the request is one of the approvers and
+      can respond to the approval (true) or not (false).
+  approvers:
+    type: array
+    description: Detailed list of the users who must provide a response to the approval.
+    items:
+      $ref: ./ApproverDTO.yaml
+  createdDate:
+    description: Date the approval was created.
+    allOf:
+      - $ref: ./DateDTO.yaml
+  completedDate:
+    description: Date the approval was completed.
+    allOf:
+      - $ref: ./DateDTO.yaml
+  _links:
+    description: The REST API URL of the approval.
+    allOf:
+      - $ref: ./SelfLinkDTO.yaml
+additionalProperties: false

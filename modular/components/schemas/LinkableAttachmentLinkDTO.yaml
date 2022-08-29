@@ -1,0 +1,5 @@
+type: object
+properties:
+  _links:
+    $ref: ./AttachmentLinkDTO.yaml
+additionalProperties: false

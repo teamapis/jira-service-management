@@ -1,0 +1,29 @@
+type: object
+properties:
+  id:
+    type: string
+    description: The ID of the changelog.
+    readOnly: true
+  author:
+    description: The user who made the change.
+    readOnly: true
+    allOf:
+      - $ref: ./UserDetails.yaml
+  created:
+    type: string
+    description: The date on which the change took place.
+    format: date-time
+    readOnly: true
+  items:
+    type: array
+    description: The list of items changed.
+    readOnly: true
+    items:
+      $ref: ./ChangeDetails.yaml
+  historyMetadata:
+    description: The history metadata associated with the changed.
+    readOnly: true
+    allOf:
+      - $ref: ./HistoryMetadata.yaml
+additionalProperties: false
+description: A changelog.

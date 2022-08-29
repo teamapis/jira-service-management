@@ -1,0 +1,106 @@
+get:
+  tags:
+    - Requesttype
+  summary: Get all request types
+  description: >-
+    This method returns all customer request types used in the Jira Service
+    Management instance, optionally filtered by a query string.
+
+
+    Use
+    [servicedeskapi/servicedesk/\{serviceDeskId\}/requesttype](#api-servicedesk-serviceDeskId-requesttype-get)
+    to find the customer request types supported by a specific service desk.
+
+
+    The returned list of customer request types can be filtered using the
+    `query` parameter. The parameter is matched against the customer request
+    types' `name` or `description`. For example, searching for "Install",
+    "Inst", "Equi", or "Equipment" will match a customer request type with the
+    *name* "Equipment Installation Request".
+
+
+    **[Permissions](#permissions) required**: Any
+  operationId: getAllRequestTypes
+  parameters:
+    - name: searchQuery
+      in: query
+      description: String to be used to filter the results.
+      schema:
+        type: string
+    - name: serviceDeskId
+      in: query
+      description: >-
+        Filter the request types by service desk Ids provided. Multiple values
+        of the query parameter are supported. For example,
+        `serviceDeskId=1&serviceDeskId=2` will return request types only for
+        service desks 1 and 2.
+      schema:
+        type: array
+        items:
+          type: integer
+          format: int32
+    - name: start
+      in: query
+      description: >-
+        The starting index of the returned objects. Base index: 0. See the
+        [Pagination](#pagination) section for more details.
+      schema:
+        type: integer
+        format: int32
+    - name: limit
+      in: query
+      description: >-
+        The maximum number of items to return per page. Default: 100. See the
+        [Pagination](#pagination) section for more details.
+      schema:
+        type: integer
+        format: int32
+    - name: expand
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+  responses:
+    '200':
+      description: Returns the request types, on the specified page of the results.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/PagedDTORequestTypeDTO.yaml
+          example: >-
+            {"_expands":[],"size":3,"start":3,"limit":3,"isLastPage":false,"_links":{"base":"https://your-domain.atlassian.net/rest/servicedeskapi","context":"context","next":"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype?start=6&limit=3","prev":"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype?start=0&limit=3"},"values":[{"_expands":[],"id":"11001","_links":{"self":"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype/11001"},"name":"Get
+            IT Help","description":"Get IT Help","helpText":"Please tell us
+            clearly the problem you have within 100
+            words.","issueTypeId":"12345","serviceDeskId":"28","portalId":"2","groupIds":["12"],"icon":{"id":"12345","_links":{"iconUrls":{"48x48":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=large","24x24":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=small","16x16":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=xsmall","32x32":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=medium"}}}},{"_expands":[],"id":"11002","_links":{"self":"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype/11002"},"name":"Request
+            a new account","description":"Request a new
+            account","issueTypeId":"12345","serviceDeskId":"28","portalId":"2","groupIds":["13","14"],"icon":{"id":"12346","_links":{"iconUrls":{"48x48":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12346?size=large","24x24":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12346?size=small","16x16":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12346?size=xsmall","32x32":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12346?size=medium"}}}},{"_expands":[],"id":"11003","_links":{"self":"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype/11003"},"name":"Hardware
+            request","description":"Request a hardware
+            support","issueTypeId":"12345","serviceDeskId":"28","portalId":"2","groupIds":["13"],"icon":{"id":"12347","_links":{"iconUrls":{"48x48":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12347?size=large","24x24":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12347?size=small","16x16":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12347?size=xsmall","32x32":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12347?size=medium"}}}}]}
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - read:servicedesk-request
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - read:servicedesk-request
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:requesttype:jira-service-management
+  x-experimental: true
+  x-atlassian-connect-scope: READ

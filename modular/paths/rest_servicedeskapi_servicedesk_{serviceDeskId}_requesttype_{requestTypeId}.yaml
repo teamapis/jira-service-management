@@ -1,0 +1,163 @@
+get:
+  tags:
+    - Servicedesk
+  summary: Get request type by id
+  description: >-
+    This method returns a customer request type from a service desk.
+
+
+    This operation can be accessed anonymously.
+
+
+    **[Permissions](#permissions) required**: Permission to access the service
+    desk.
+  operationId: getRequestTypeById
+  parameters:
+    - name: serviceDeskId
+      in: path
+      description: >-
+        The ID of the service desk whose customer request type is to be
+        returned. This can alternatively be a [project
+        identifier.](#project-identifiers)
+      required: true
+      schema:
+        type: string
+    - name: requestTypeId
+      in: path
+      description: The ID of the customer request type to be returned.
+      required: true
+      schema:
+        type: integer
+        format: int32
+    - name: expand
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+  responses:
+    '200':
+      description: Returns the customer request type item.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/RequestTypeDTO.yaml
+          example: >-
+            {"_expands":[],"id":"11001","_links":{"self":"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype/11001"},"name":"Get
+            IT Help","description":"Get IT Help","helpText":"Please tell us
+            clearly the problem you have within 100
+            words.","issueTypeId":"12345","serviceDeskId":"28","portalId":"2","groupIds":["12"],"icon":{"id":"12345","_links":{"iconUrls":{"48x48":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=large","24x24":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=small","16x16":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=xsmall","32x32":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=medium"}}}}
+    '401':
+      description: Returned if the user credentials are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the service desk or customer request type do not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - read:servicedesk-request
+    - {}
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - read:servicedesk-request
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:requesttype:jira-service-management
+  x-atlassian-connect-scope: READ
+delete:
+  tags:
+    - Servicedesk
+  summary: Delete request type
+  description: >-
+    This method deletes a customer request type from a service desk, and removes
+    it from all customer requests.  
+
+    This only supports classic projects.
+
+
+    **[Permissions](#permissions) required**: Service desk administrator.
+  operationId: deleteRequestType
+  parameters:
+    - name: serviceDeskId
+      in: path
+      description: >-
+        The ID or [project identifier](#project-identifiers) of the service
+        desk.
+      required: true
+      schema:
+        type: string
+    - name: requestTypeId
+      in: path
+      description: The ID of the request type.
+      required: true
+      schema:
+        type: integer
+        format: int32
+  responses:
+    '204':
+      description: Returned if the request type is deleted.
+    '400':
+      description: Returned if the request type ID is not valid.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: >-
+        Returned if the user does not have the necessary permission to complete
+        this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the service desk or request type do not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - manage:jira-project
+  x-experimental: true
+  security:
+    - OAuth2:
+        - manage:jira-project
+  x-atlassian-connect-scope: PROJECT_ADMIN

@@ -1,0 +1,77 @@
+type: object
+properties:
+  issueId:
+    type: string
+    description: ID of the request, as the peer issue ID.
+  issueKey:
+    type: string
+    description: Key of the request, as the peer issue key.
+  requestTypeId:
+    type: string
+    description: ID of the request type for the request.
+  requestType:
+    description: Expandable details of the request type.
+    allOf:
+      - $ref: ./RequestTypeDTO.yaml
+  serviceDeskId:
+    type: string
+    description: ID of the service desk the request belongs to.
+  serviceDesk:
+    description: Expandable details of the service desk.
+    allOf:
+      - $ref: ./ServiceDeskDTO.yaml
+  createdDate:
+    description: Date on which the request was created.
+    allOf:
+      - $ref: ./DateDTO.yaml
+  reporter:
+    description: Details of the customer reporting the request.
+    allOf:
+      - $ref: ./UserDTO.yaml
+  requestFieldValues:
+    type: array
+    description: >-
+      JSON map of Jira field IDs and their values representing the content of
+      the request.
+    items:
+      $ref: ./CustomerRequestFieldValueDTO.yaml
+  currentStatus:
+    description: Status of the request.
+    allOf:
+      - $ref: ./CustomerRequestStatusDTO.yaml
+  status:
+    description: Expandable details of the request's status history.
+    allOf:
+      - $ref: ./PagedDTOCustomerRequestStatusDTO.yaml
+  participants:
+    description: Expandable details of the customers participating in the request.
+    allOf:
+      - $ref: ./PagedDTOUserDTO.yaml
+  sla:
+    description: Expandable details of the SLAs relating to the request.
+    allOf:
+      - $ref: ./PagedDTOSlaInformationDTO.yaml
+  attachments:
+    description: List of attachments included with the request.
+    allOf:
+      - $ref: ./PagedDTOAttachmentDTO.yaml
+  comments:
+    description: List of comments included with the request.
+    allOf:
+      - $ref: ./PagedDTOCommentDTO.yaml
+  actions:
+    description: List of actions that the user can take on the request.
+    allOf:
+      - $ref: ./CustomerRequestActionsDTO.yaml
+  _expands:
+    type: array
+    description: >-
+      List of items that can be expanded in the response by specifying the
+      expand query parameter.
+    items:
+      type: string
+  _links:
+    description: List of links associated with the request.
+    allOf:
+      - $ref: ./CustomerRequestLinkDTO.yaml
+additionalProperties: false

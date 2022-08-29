@@ -1,0 +1,8 @@
+type: object
+properties:
+  fields:
+    type: object
+    additionalProperties:
+      $ref: ./FieldMetadata.yaml
+    readOnly: true
+description: A list of editable field details.

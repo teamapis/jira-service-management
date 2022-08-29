@@ -1,0 +1,230 @@
+get:
+  tags:
+    - Request
+  summary: Get feedback
+  description: >-
+    This method retrieves a feedback of a request using it's `requestKey` or
+    `requestId`
+
+
+    **[Permissions](#permissions) required**: User has view request permissions.
+  operationId: getFeedback
+  parameters:
+    - name: requestIdOrKey
+      in: path
+      description: The id or the key of the request to post the feedback on
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Returns the comment.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/CSATFeedbackFullDTO.yaml
+          example: '{"type":"csat","rating":4,"comment":{"body":"Great work!"}}'
+    '400':
+      description: Returned if the HTTP request is invalid.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '401':
+      description: Returned if no logged in user/app.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: >-
+        Returned if the user/app does not have permission to complete this
+        request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the customer request does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - read:servicedesk-request
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - read:servicedesk-request
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:request.feedback:jira-service-management
+        - read:user:jira
+  x-experimental: true
+  x-atlassian-connect-scope: READ
+post:
+  tags:
+    - Request
+  summary: Post feedback
+  description: >-
+    This method adds a feedback on an request using it's `requestKey` or
+    `requestId`
+
+
+    **[Permissions](#permissions) required**: User must be the reporter or an
+    Atlassian Connect app.
+  operationId: postFeedback
+  parameters:
+    - name: requestIdOrKey
+      in: path
+      description: The id or the key of the request to post the feedback on
+      required: true
+      schema:
+        type: string
+  requestBody:
+    description: The feedback to be added on the request
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/CSATFeedbackFullDTO.yaml
+        example:
+          rating: 4
+          comment:
+            body: Great work!
+          type: csat
+    required: true
+  responses:
+    '201':
+      description: Returns the comment.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/CSATFeedbackFullDTO.yaml
+          example: '{"type":"csat","rating":4,"comment":{"body":"Great work!"}}'
+    '400':
+      description: Returned if the HTTP request is invalid.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '401':
+      description: Returned if no logged in user/app.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: >-
+        Returned if the user/app does not have permission to complete this
+        request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the customer request does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - write:servicedesk-request
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - write:servicedesk-request
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:request.feedback:jira-service-management
+        - write:request.feedback:jira-service-management
+        - read:user:jira
+  x-experimental: true
+  x-atlassian-connect-scope: WRITE
+delete:
+  tags:
+    - Request
+  summary: Delete feedback
+  description: >-
+    This method deletes the feedback of request using it's `requestKey` or
+    `requestId`
+
+
+    **[Permissions](#permissions) required**: User must be the reporter or an
+    Atlassian Connect app.
+  operationId: deleteFeedback
+  parameters:
+    - name: requestIdOrKey
+      in: path
+      description: The id or the key of the request to post the feedback on
+      required: true
+      schema:
+        type: string
+  responses:
+    '204':
+      description: No content.
+      content:
+        application/json:
+          schema: {}
+    '401':
+      description: Returned if no logged in user/app.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: >-
+        Returned if the user/app does not have permission to complete this
+        request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the customer request does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - write:servicedesk-request
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - write:servicedesk-request
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:request.feedback:jira-service-management
+        - delete:request.feedback:jira-service-management
+        - read:user:jira
+  x-experimental: true
+  x-atlassian-connect-scope: DELETE

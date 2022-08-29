@@ -1,0 +1,16 @@
+type: object
+properties:
+  type:
+    type: string
+    description: 'Indicates the type of feedback, supported values: `csat`.'
+  rating:
+    type: integer
+    description: >-
+      A numeric representation of the rating, this must be an integer value
+      between 1 and 5.
+    format: int32
+  comment:
+    description: (Optional) The comment provided with this feedback.
+    allOf:
+      - $ref: ./AdditionalCommentDTO.yaml
+additionalProperties: false

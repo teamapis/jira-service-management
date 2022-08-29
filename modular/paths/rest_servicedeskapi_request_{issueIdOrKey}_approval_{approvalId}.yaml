@@ -1,0 +1,186 @@
+get:
+  tags:
+    - Request
+  summary: Get approval by id
+  description: >-
+    This method returns an approval. Use this method to determine the status of
+    an approval and the list of approvers.
+
+
+    **[Permissions](#permissions) required**: Permission to view the customer
+    request.
+  operationId: getApprovalById
+  parameters:
+    - name: issueIdOrKey
+      in: path
+      description: The ID or key of the customer request the approval is on.
+      required: true
+      schema:
+        type: string
+    - name: approvalId
+      in: path
+      description: The ID of the approval to be returned.
+      required: true
+      schema:
+        type: integer
+        format: int32
+  responses:
+    '200':
+      description: Returns the requested approval.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ApprovalDTO.yaml
+          example: >-
+            {"id":"1","name":"Please approve this
+            request","finalDecision":"approved","canAnswerApproval":false,"approvers":[{"approver":{"accountId":"qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","name":"qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","key":"qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","emailAddress":"fred@example.com","displayName":"Fred
+            F.
+            User","active":true,"timeZone":"Australia/Sydney","_links":{"jiraRest":"https://your-domain.atlassian.net/rest/api/2/user?username=qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","avatarUrls":{"48x48":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=48&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue","24x24":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=24&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D24%26noRedirect%3Dtrue","16x16":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=16&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D16%26noRedirect%3Dtrue","32x32":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=32&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D32%26noRedirect%3Dtrue"},"self":"https://your-domain.atlassian.net/rest/api/2/user?username=qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b"}},"approverDecision":"approved"}],"createdDate":{"iso8601":"2016-09-28T14:01:00+0700","jira":"2016-09-28T14:01:00.000+0700","friendly":"Monday
+            14:01
+            PM","epochMillis":1475046060000},"completedDate":{"iso8601":"2016-09-29T14:30:00+0700","jira":"2016-09-29T14:30:00.000+0700","friendly":"Today
+            14:30
+            PM","epochMillis":1475134200000},"_links":{"self":"https://your-domain.atlassian.net/rest/servicedeskapi/request/2/approval/1"}}
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the customer request or approval do not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - read:servicedesk-request
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - read:servicedesk-request
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:request.approval:jira-service-management
+        - read:user:jira
+  x-atlassian-connect-scope: READ
+post:
+  tags:
+    - Request
+  summary: Answer approval
+  description: >-
+    This method enables a user to **Approve** or **Decline** an approval on a
+    customer request. The approval is assumed to be owned by the user making the
+    call.
+
+
+    **[Permissions](#permissions) required**: User is assigned to the approval
+    request.
+  operationId: answerApproval
+  parameters:
+    - name: issueIdOrKey
+      in: path
+      description: The ID or key of the customer request to be updated.
+      required: true
+      schema:
+        type: string
+    - name: approvalId
+      in: path
+      description: The ID of the approval to be updated.
+      required: true
+      schema:
+        type: integer
+        format: int32
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/ApprovalDecisionRequestDTO.yaml
+        example:
+          decision: approve
+    required: true
+  responses:
+    '200':
+      description: Returns the updated approval.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ApprovalDTO.yaml
+          example: >-
+            {"id":"1","name":"Please approve this
+            request","finalDecision":"approved","canAnswerApproval":false,"approvers":[{"approver":{"accountId":"qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","name":"qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","key":"qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","emailAddress":"fred@example.com","displayName":"Fred
+            F.
+            User","active":true,"timeZone":"Australia/Sydney","_links":{"jiraRest":"https://your-domain.atlassian.net/rest/api/2/user?username=qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","avatarUrls":{"48x48":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=48&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue","24x24":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=24&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D24%26noRedirect%3Dtrue","16x16":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=16&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D16%26noRedirect%3Dtrue","32x32":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=32&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D32%26noRedirect%3Dtrue"},"self":"https://your-domain.atlassian.net/rest/api/2/user?username=qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b"}},"approverDecision":"approved"}],"createdDate":{"iso8601":"2016-09-28T14:01:00+0700","jira":"2016-09-28T14:01:00.000+0700","friendly":"Monday
+            14:01
+            PM","epochMillis":1475046060000},"completedDate":{"iso8601":"2016-09-29T14:30:00+0700","jira":"2016-09-29T14:30:00.000+0700","friendly":"Today
+            14:30
+            PM","epochMillis":1475134200000},"_links":{"self":"https://your-domain.atlassian.net/rest/servicedeskapi/request/2/approval/1"}}
+    '400':
+      description: Returned if the request is not valid.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the customer request or the approval do not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '409':
+      description: >-
+        Returned if the customer has already submitted a decision or the
+        approval has already been completed.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - write:servicedesk-request
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - write:servicedesk-request
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:request.approval:jira-service-management
+        - write:request.approval:jira-service-management
+        - read:user:jira
+  x-atlassian-connect-scope: WRITE

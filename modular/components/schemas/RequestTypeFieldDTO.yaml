@@ -1,0 +1,36 @@
+type: object
+properties:
+  fieldId:
+    type: string
+    description: ID of the field.
+  name:
+    type: string
+    description: Name of the field.
+  description:
+    type: string
+    description: Description of the field.
+  required:
+    type: boolean
+    description: Indicates if the field is required (true) or not (false).
+  defaultValues:
+    type: array
+    description: List of default values for the field.
+    items:
+      $ref: ./RequestTypeFieldValueDTO.yaml
+  validValues:
+    type: array
+    description: List of valid values for the field.
+    items:
+      $ref: ./RequestTypeFieldValueDTO.yaml
+  presetValues:
+    type: array
+    description: List of preset values for the field.
+    items:
+      type: string
+  jiraSchema:
+    description: Jira specific implementation details for the field in the UI.
+    allOf:
+      - $ref: ./JsonTypeBean.yaml
+  visible:
+    type: boolean
+additionalProperties: false

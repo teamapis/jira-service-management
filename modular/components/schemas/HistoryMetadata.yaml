@@ -1,0 +1,42 @@
+type: object
+properties:
+  type:
+    type: string
+    description: The type of the history record.
+  description:
+    type: string
+    description: The description of the history record.
+  descriptionKey:
+    type: string
+    description: The description key of the history record.
+  activityDescription:
+    type: string
+    description: The activity described in the history record.
+  activityDescriptionKey:
+    type: string
+    description: The key of the activity described in the history record.
+  emailDescription:
+    type: string
+    description: The description of the email address associated the history record.
+  emailDescriptionKey:
+    type: string
+    description: The description key of the email address associated the history record.
+  actor:
+    description: Details of the user whose action created the history record.
+    allOf:
+      - $ref: ./HistoryMetadataParticipant.yaml
+  generator:
+    description: Details of the system that generated the history record.
+    allOf:
+      - $ref: ./HistoryMetadataParticipant.yaml
+  cause:
+    description: Details of the cause that triggered the creation the history record.
+    allOf:
+      - $ref: ./HistoryMetadataParticipant.yaml
+  extraData:
+    type: object
+    additionalProperties:
+      type: string
+    description: Additional arbitrary information about the history record.
+additionalProperties: true
+description: Details of issue history metadata.

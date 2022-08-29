@@ -1,0 +1,274 @@
+get:
+  tags:
+    - Servicedesk
+  summary: Get customers
+  description: >-
+    This method returns a list of the customers on a service desk.
+
+
+    The returned list of customers can be filtered using the `query` parameter.
+    The parameter is matched against customers' `displayName`, `name`, or
+    `email`. For example, searching for "John", "Jo", "Smi", or "Smith" will
+    match a user with display name "John Smith".
+
+
+    **[Permissions](#permissions) required**: Permission to view this Service
+    Desk's customers.
+  operationId: getCustomers
+  parameters:
+    - name: serviceDeskId
+      in: path
+      description: >-
+        The ID of the service desk the customer list should be returned from.
+        This can alternatively be a [project identifier.](#project-identifiers)
+      required: true
+      schema:
+        type: string
+    - name: query
+      in: query
+      description: The string used to filter the customer list.
+      schema:
+        type: string
+    - name: start
+      in: query
+      description: >-
+        The starting index of the returned objects. Base index: 0. See the
+        [Pagination](#pagination) section for more details.
+      schema:
+        type: integer
+        format: int32
+    - name: limit
+      in: query
+      description: >-
+        The maximum number of users to return per page. Default: 50. See the
+        [Pagination](#pagination) section for more details.
+      schema:
+        type: integer
+        format: int32
+  responses:
+    '200':
+      description: Returns the service desk's customer list.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/PagedDTOUserDTO.yaml
+          example: >-
+            {"_expands":[],"size":1,"start":1,"limit":1,"isLastPage":false,"_links":{"base":"https://your-domain.atlassian.net/rest/servicedeskapi","context":"context","next":"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/1/customer?start=2&limit=1","prev":"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/1/customer?start=0&limit=1"},"values":[{"accountId":"qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","name":"qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","key":"qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","emailAddress":"fred@example.com","displayName":"Fred
+            F.
+            User","active":true,"timeZone":"Australia/Sydney","_links":{"jiraRest":"https://your-domain.atlassian.net/rest/api/2/user?username=qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","avatarUrls":{"48x48":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=48&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue","24x24":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=24&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D24%26noRedirect%3Dtrue","16x16":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=16&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D16%26noRedirect%3Dtrue","32x32":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=32&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D32%26noRedirect%3Dtrue"},"self":"https://your-domain.atlassian.net/rest/api/2/user?username=qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b"}}]}
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the service desk does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - manage:servicedesk-customer
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - manage:servicedesk-customer
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:servicedesk.customer:jira-service-management
+        - read:user:jira
+  x-experimental: true
+  x-atlassian-connect-scope: READ
+post:
+  tags:
+    - Servicedesk
+  summary: Add customers
+  description: >-
+    Adds one or more customers to a service desk. If any of the passed customers
+    are associated with the service desk, no changes will be made for those
+    customers and the resource returns a 204 success code.
+
+
+    **[Permissions](#permissions) required**: Service desk administrator
+  operationId: addCustomers
+  parameters:
+    - name: serviceDeskId
+      in: path
+      description: >-
+        The ID of the service desk the customer list should be returned from.
+        This can alternatively be a [project identifier.](#project-identifiers)
+      required: true
+      schema:
+        type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/ServiceDeskCustomerDTO.yaml
+        example:
+          accountIds:
+            - qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3a01db05e2a66fa80bd
+            - qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b
+            - qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d69abfa3980ce712caae
+          usernames:
+            - qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3a01db05e2a66fa80bd
+            - qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b
+            - qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d69abfa3980ce712caae
+    required: true
+  responses:
+    '204':
+      description: >-
+        Returned if all the customers were added to the service desk or were
+        already associated with the service desk.
+    '400':
+      description: >-
+        Returned if any of the customers do not exist. Note that any valid
+        customers are added, but no confirmation is returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the service desk does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - manage:servicedesk-customer
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - manage:servicedesk-customer
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:servicedesk.customer:jira-service-management
+        - write:servicedesk.customer:jira-service-management
+  x-atlassian-connect-scope: WRITE
+delete:
+  tags:
+    - Servicedesk
+  summary: Remove customers
+  description: >-
+    This method removes one or more customers from a service desk. The service
+    desk must have closed access. If any of the passed customers are not
+    associated with the service desk, no changes will be made for those
+    customers and the resource returns a 204 success code.
+
+
+    **[Permissions](#permissions) required**: Services desk administrator
+  operationId: removeCustomers
+  parameters:
+    - name: serviceDeskId
+      in: path
+      description: >-
+        The ID of the service desk the customers should be removed from. This
+        can alternatively be a [project identifier.](#project-identifiers)
+      required: true
+      schema:
+        type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/ServiceDeskCustomerDTO.yaml
+        example:
+          accountIds:
+            - qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3a01db05e2a66fa80bd
+            - qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b
+            - qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d69abfa3980ce712caae
+          usernames:
+            - qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3a01db05e2a66fa80bd
+            - qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b
+            - qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d69abfa3980ce712caae
+    required: true
+  responses:
+    '204':
+      description: >-
+        Returned if the customers were removed from the service desk, or any of
+        the customers were not associated with the service desk.
+    '400':
+      description: Returned if the service desk has public signup or open access enabled.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the service desk does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - manage:servicedesk-customer
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - manage:servicedesk-customer
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:servicedesk.customer:jira-service-management
+        - delete:servicedesk.customer:jira-service-management
+  x-experimental: true
+  x-atlassian-connect-scope: INACCESSIBLE

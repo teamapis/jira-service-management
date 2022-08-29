@@ -1,0 +1,10 @@
+type: object
+properties:
+  keys:
+    type: array
+    description: Property key details.
+    readOnly: true
+    items:
+      $ref: ./PropertyKey.yaml
+additionalProperties: false
+description: List of property keys.

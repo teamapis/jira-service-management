@@ -1,0 +1,34 @@
+type: object
+properties:
+  startTime:
+    description: Time and date at which the SLA cycle started.
+    allOf:
+      - $ref: ./DateDTO.yaml
+  breachTime:
+    description: Time and date at which the SLA cycle would have breached its limit.
+    allOf:
+      - $ref: ./DateDTO.yaml
+  breached:
+    type: boolean
+    description: Indicates whether the SLA has been breached (true) or not (false).
+  paused:
+    type: boolean
+    description: Indicates whether the SLA is paused (true) or not (false).
+  withinCalendarHours:
+    type: boolean
+    description: >-
+      Indicates whether the SLA it timed during calendared working hours only
+      (true) or not (false).
+  goalDuration:
+    description: Duration within which the service should be completed.
+    allOf:
+      - $ref: ./DurationDTO.yaml
+  elapsedTime:
+    description: Duration of the service.
+    allOf:
+      - $ref: ./DurationDTO.yaml
+  remainingTime:
+    description: Duration remaining in which to complete the service.
+    allOf:
+      - $ref: ./DurationDTO.yaml
+additionalProperties: false

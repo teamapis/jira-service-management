@@ -1,0 +1,204 @@
+get:
+  tags:
+    - Request
+  summary: Get request comments
+  description: >-
+    This method returns all comments on a customer request. No permissions error
+    is provided if, for example, the user doesn't have access to the service
+    desk or request, the method simply returns an empty response.
+
+
+    **[Permissions](#permissions) required**: Permission to view the customer
+    request.
+
+
+    **Response limitations**: Customers are returned public comments only.
+  operationId: getRequestComments
+  parameters:
+    - name: issueIdOrKey
+      in: path
+      description: The ID or key of the customer request whose comments will be retrieved.
+      required: true
+      schema:
+        type: string
+    - name: public
+      in: query
+      description: 'Specifies whether to return public comments or not. Default: true.'
+      schema:
+        type: boolean
+    - name: internal
+      in: query
+      description: 'Specifies whether to return internal comments or not. Default: true.'
+      schema:
+        type: boolean
+    - name: expand
+      in: query
+      description: >-
+        A multi-value parameter indicating which properties of the comment to
+        expand:
+
+         *  `attachment` returns the attachment details, if any, for each comment. (If you want to get all attachments for a request, use [servicedeskapi/request/\{issueIdOrKey\}/attachment](#api-request-issueIdOrKey-attachment-get).)
+         *  `renderedBody` (Experimental) returns the rendered body in HTML format (in addition to the raw body) for each comment.
+      schema:
+        type: array
+        items:
+          type: string
+    - name: start
+      in: query
+      description: >-
+        The starting index of the returned comments. Base index: 0. See the
+        [Pagination](#pagination) section for more details.
+      schema:
+        type: integer
+        format: int32
+    - name: limit
+      in: query
+      description: >-
+        The maximum number of comments to return per page. Default: 50. See the
+        [Pagination](#pagination) section for more details.
+      schema:
+        type: integer
+        format: int32
+  responses:
+    '200':
+      description: Returns the comments, on the specified page of the results.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/PagedDTOCommentDTO.yaml
+          example: >-
+            {"_expands":[],"size":1,"start":1,"limit":1,"isLastPage":false,"_links":{"base":"https://your-domain.atlassian.net/rest/servicedeskapi","context":"context","next":"https://your-domain.atlassian.net/rest/servicedeskapi/request/2000/comment?start=2&limit=1","prev":"https://your-domain.atlassian.net/rest/servicedeskapi/request/2000/comment?start=0&limit=1"},"values":[{"_expands":["attachment","renderedBody"],"id":"1000","body":"Hello
+            there","public":true,"author":{"accountId":"qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","name":"qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","key":"qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","emailAddress":"fred@example.com","displayName":"Fred
+            F.
+            User","active":true,"timeZone":"Australia/Sydney","_links":{"jiraRest":"https://your-domain.atlassian.net/rest/api/2/user?username=qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","avatarUrls":{"48x48":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=48&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue","24x24":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=24&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D24%26noRedirect%3Dtrue","16x16":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=16&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D16%26noRedirect%3Dtrue","32x32":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=32&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D32%26noRedirect%3Dtrue"},"self":"https://your-domain.atlassian.net/rest/api/2/user?username=qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b"}},"created":{"iso8601":"2015-10-09T10:22:00+0700","jira":"2015-10-09T10:22:00.000+0700","friendly":"Today
+            10:22
+            AM","epochMillis":1444360920000},"_links":{"self":"https://your-domain.atlassian.net/rest/servicedeskapi/request/2000/comment/1000"}}]}
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the customer request does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - read:servicedesk-request
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - read:servicedesk-request
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:request.comment:jira-service-management
+        - read:user:jira
+  x-atlassian-connect-scope: READ
+post:
+  tags:
+    - Request
+  summary: Create request comment
+  description: >-
+    This method creates a public or private (internal) comment on a customer
+    request, with the comment visibility set by `public`. The user recorded as
+    the author of the comment.
+
+
+    **[Permissions](#permissions) required**: User has Add Comments permission.
+
+
+    **Request limitations**: Customers can set comments to public visibility
+    only.
+  operationId: createRequestComment
+  parameters:
+    - name: issueIdOrKey
+      in: path
+      description: >-
+        The ID or key of the customer request to which the comment will be
+        added.
+      required: true
+      schema:
+        type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/CommentCreateDTO.yaml
+        example:
+          public: true
+          body: Hello there
+    required: true
+  responses:
+    '201':
+      description: Returns the comment.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/CommentDTO.yaml
+          example: >-
+            {"_expands":["attachment","renderedBody"],"id":"1000","body":"Hello
+            there","public":true,"author":{"accountId":"qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","name":"qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","key":"qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","emailAddress":"fred@example.com","displayName":"Fred
+            F.
+            User","active":true,"timeZone":"Australia/Sydney","_links":{"jiraRest":"https://your-domain.atlassian.net/rest/api/2/user?username=qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","avatarUrls":{"48x48":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=48&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue","24x24":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=24&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D24%26noRedirect%3Dtrue","16x16":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=16&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D16%26noRedirect%3Dtrue","32x32":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=32&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D32%26noRedirect%3Dtrue"},"self":"https://your-domain.atlassian.net/rest/api/2/user?username=qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b"}},"created":{"iso8601":"2015-10-09T10:22:00+0700","jira":"2015-10-09T10:22:00.000+0700","friendly":"Today
+            10:22
+            AM","epochMillis":1444360920000},"_links":{"self":"https://your-domain.atlassian.net/rest/servicedeskapi/request/2000/comment/1000"}}
+    '400':
+      description: >-
+        Returned if the HTTP request is invalid, e.g. missing the required
+        `public`.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the customer request does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - write:servicedesk-request
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - write:servicedesk-request
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:request.comment:jira-service-management
+        - write:request.comment:jira-service-management
+        - read:user:jira
+  x-atlassian-connect-scope: WRITE

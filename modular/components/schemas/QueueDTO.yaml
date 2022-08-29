@@ -1,0 +1,25 @@
+type: object
+properties:
+  id:
+    type: string
+    description: ID for the queue.
+  name:
+    type: string
+    description: Short name for the queue.
+  jql:
+    type: string
+    description: JQL query that filters reqeusts for the queue.
+  fields:
+    type: array
+    description: Fields returned for each request in the queue.
+    items:
+      type: string
+  issueCount:
+    type: integer
+    description: The count of customer requests in the queue.
+    format: int64
+  _links:
+    description: REST API URL to the queue.
+    allOf:
+      - $ref: ./SelfLinkDTO.yaml
+additionalProperties: false

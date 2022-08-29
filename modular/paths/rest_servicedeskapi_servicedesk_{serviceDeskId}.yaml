@@ -1,0 +1,71 @@
+get:
+  tags:
+    - Servicedesk
+  summary: Get service desk by id
+  description: >-
+    This method returns a service desk. Use this method to get service desk
+    details whenever your application component is passed a service desk ID but
+    needs to display other service desk details.
+
+
+    **[Permissions](#permissions) required**: Permission to access the Service
+    Desk. For example, being the Service Desk's Administrator or one of its
+    Agents or Users.
+  operationId: getServiceDeskById
+  parameters:
+    - name: serviceDeskId
+      in: path
+      description: >-
+        The ID of the service desk to return. This can alternatively be a
+        [project identifier.](#project-identifiers)
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Returns the requested service desk.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ServiceDeskDTO.yaml
+          example: >-
+            {"id":"10001","projectId":"11001","projectName":"IT Help
+            Desk","projectKey":"ITH","_links":{"self":"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/10001"}}
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if service desk does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - read:servicedesk-request
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - read:servicedesk-request
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:servicedesk:jira-service-management
+  x-atlassian-connect-scope: READ

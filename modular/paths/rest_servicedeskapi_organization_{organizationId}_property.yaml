@@ -1,0 +1,76 @@
+get:
+  tags:
+    - Organization
+  summary: Get properties keys
+  description: >-
+    Returns the keys of all properties for an organization. Use this resource
+    when you need to find out what additional properties items have been added
+    to an organization.
+
+
+    **[Permissions](#permissions) required**: Any
+
+
+    **Response limitations**: Customers can only access properties of
+    organizations of which they are members.
+  operationId: getPropertiesKeys
+  parameters:
+    - name: organizationId
+      in: path
+      description: The ID of the organization from which keys will be returned.
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Returned if the organization was found.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/PropertyKeys.yaml
+          example: >-
+            {"keys":[{"self":"/rest/servicedeskapi/organization/1/property/propertyKey","key":"organization.attributes"}]}
+    '400':
+      description: Returned if the organization ID is invalid.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the organization does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - manage:servicedesk-customer
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - manage:servicedesk-customer
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:organization.property:jira-service-management
+  x-atlassian-connect-scope: INACCESSIBLE

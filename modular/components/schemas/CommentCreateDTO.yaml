@@ -1,0 +1,11 @@
+type: object
+properties:
+  body:
+    type: string
+    description: Content of the comment.
+  public:
+    type: boolean
+    description: >-
+      Indicates whether the comment is public (true) or private/internal
+      (false).
+additionalProperties: false

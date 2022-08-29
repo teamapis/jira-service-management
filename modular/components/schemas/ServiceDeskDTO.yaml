@@ -1,0 +1,19 @@
+type: object
+properties:
+  id:
+    type: string
+    description: ID of the service desk.
+  projectId:
+    type: string
+    description: ID of the peer project for the service desk.
+  projectName:
+    type: string
+    description: Name of the project and service desk.
+  projectKey:
+    type: string
+    description: Key of the peer project of the service desk.
+  _links:
+    description: REST API URL to the service desk.
+    allOf:
+      - $ref: ./SelfLinkDTO.yaml
+additionalProperties: false

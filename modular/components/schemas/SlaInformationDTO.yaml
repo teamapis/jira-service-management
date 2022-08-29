@@ -1,0 +1,25 @@
+type: object
+properties:
+  id:
+    type: string
+    description: ID of the Service Level Agreement (SLA).
+  name:
+    type: string
+    description: Description of the SLA.
+  completedCycles:
+    type: array
+    description: List of completed cycles for the SLA.
+    items:
+      $ref: ./SlaInformationCompletedCycleDTO.yaml
+  ongoingCycle:
+    description: Details of the active cycle for the SLA.
+    allOf:
+      - $ref: ./SlaInformationOngoingCycleDTO.yaml
+  slaDisplayFormat:
+    type: string
+    description: Format in which SLA is to be displayed in the UI
+  _links:
+    description: REST API URL for the SLA.
+    allOf:
+      - $ref: ./SelfLinkDTO.yaml
+additionalProperties: false

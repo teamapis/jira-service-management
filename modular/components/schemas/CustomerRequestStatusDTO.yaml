@@ -1,0 +1,18 @@
+type: object
+properties:
+  status:
+    type: string
+    description: Name of the status condition.
+  statusCategory:
+    type: string
+    description: Status category the status belongs to.
+    enum:
+      - UNDEFINED
+      - NEW
+      - INDETERMINATE
+      - DONE
+  statusDate:
+    description: Date on which the status was attained.
+    allOf:
+      - $ref: ./DateDTO.yaml
+additionalProperties: false

@@ -1,0 +1,160 @@
+get:
+  tags:
+    - Request
+  summary: Get sla information
+  description: >-
+    This method returns all the SLA records on a customer request. A customer
+    request can have zero or more SLAs. Each SLA can have recordings for zero or
+    more "completed cycles" and zero or 1 "ongoing cycle". Each cycle includes
+    information on when it started and stopped, and whether it breached the SLA
+    goal.
+
+
+    **[Permissions](#permissions) required**: Agent for the Service Desk
+    containing the queried customer request.
+  operationId: getSlaInformation
+  parameters:
+    - name: issueIdOrKey
+      in: path
+      description: The ID or key of the customer request whose SLAs will be retrieved.
+      required: true
+      schema:
+        type: string
+    - name: start
+      in: query
+      description: >-
+        The starting index of the returned objects. Base index: 0. See the
+        [Pagination](#pagination) section for more details.
+      schema:
+        type: integer
+        format: int32
+    - name: limit
+      in: query
+      description: >-
+        The maximum number of request types to return per page. Default: 50. See
+        the [Pagination](#pagination) section for more details.
+      schema:
+        type: integer
+        format: int32
+  responses:
+    '200':
+      description: >-
+        Returns the SLA records on the customer request, on the specified page
+        of the results.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/PagedDTOSlaInformationDTO.yaml
+          example: >-
+            {"_expands":[],"size":3,"start":3,"limit":3,"isLastPage":false,"_links":{"base":"https://your-domain.atlassian.net/rest/servicedeskapi","context":"context","next":"https://your-domain.atlassian.net/rest/servicedeskapi/request/101102/sla?start=6&limit=3","prev":"https://your-domain.atlassian.net/rest/servicedeskapi/request/101102/sla?start=0&limit=3"},"values":[{"name":"Time
+            To First
+            Response","_links":{"self":"https://your-domain.atlassian.net/rest/servicedeskapi/request/101102/sla/10030"},"completedCycles":[{"startTime":{"iso8601":"2015-10-09T10:45:23+0700","jira":"2015-10-09T10:45:23.000+0700","friendly":"Yesterday
+            10:45
+            AM","epochMillis":1444362323000},"stopTime":{"iso8601":"2015-10-09T10:52:23+0700","jira":"2015-10-09T10:52:23.000+0700","friendly":"Yesterday
+            10:52
+            AM","epochMillis":1444362743000},"breachTime":{"iso8601":"2015-10-09T10:50:23+0700","jira":"2015-10-09T10:50:23.000+0700","friendly":"Yesterday
+            10:50
+            AM","epochMillis":1444362623000},"breached":false,"goalDuration":{"millis":14400000,"friendly":"4h
+            240m"},"elapsedTime":{"millis":420000,"friendly":"0h
+            7m"},"remainingTime":{"millis":13980000,"friendly":"3h
+            233m"}},{"startTime":{"iso8601":"2015-10-10T10:52:23+0700","jira":"2015-10-10T10:52:23.000+0700","friendly":"Today
+            10:52
+            AM","epochMillis":1444449143000},"stopTime":{"iso8601":"2015-10-10T16:15:23+0700","jira":"2015-10-10T16:15:23.000+0700","friendly":"Today
+            16:15
+            PM","epochMillis":1444468523000},"breachTime":{"iso8601":"2015-10-10T15:12:23+0700","jira":"2015-10-10T15:12:23.000+0700","friendly":"Today
+            15:12
+            PM","epochMillis":1444464743000},"breached":true,"goalDuration":{"millis":14400000,"friendly":"4h
+            240m"},"elapsedTime":{"millis":19380000,"friendly":"5h
+            323m"},"remainingTime":{"millis":-4980000,"friendly":"-1h
+            -83m"}}],"ongoingCycle":{"startTime":{"iso8601":"2015-10-10T19:15:23+0700","jira":"2015-10-10T19:15:23.000+0700","friendly":"Today
+            19:15
+            PM","epochMillis":1444479323000},"breached":false,"paused":false,"withinCalendarHours":false,"goalDuration":{"millis":14400000,"friendly":"4h
+            240m"},"elapsedTime":{"millis":5640000,"friendly":"1h
+            94m"},"remainingTime":{"millis":8760000,"friendly":"2h
+            146m"}}},{"name":"Time To
+            Resolution","_links":{"self":"https://your-domain.atlassian.net/rest/servicedeskapi/request/101102/sla/10040"},"completedCycles":[{"startTime":{"iso8601":"2015-10-09T10:45:23+0700","jira":"2015-10-09T10:45:23.000+0700","friendly":"Yesterday
+            10:45
+            AM","epochMillis":1444362323000},"stopTime":{"iso8601":"2015-10-09T20:52:23+0700","jira":"2015-10-09T20:52:23.000+0700","friendly":"Yesterday
+            20:52
+            PM","epochMillis":1444398743000},"breachTime":{"iso8601":"2015-10-09T20:50:23+0700","jira":"2015-10-09T20:50:23.000+0700","friendly":"Yesterday
+            20:50
+            PM","epochMillis":1444398623000},"breached":false,"goalDuration":{"millis":72000000,"friendly":"20h
+            1200m"},"elapsedTime":{"millis":36420000,"friendly":"10h
+            607m"},"remainingTime":{"millis":35580000,"friendly":"9h
+            593m"}},{"startTime":{"iso8601":"2015-10-10T20:52:23+0700","jira":"2015-10-10T20:52:23.000+0700","friendly":"Today
+            20:52
+            PM","epochMillis":1444485143000},"stopTime":{"iso8601":"2015-10-11T02:15:23+0700","jira":"2015-10-11T02:15:23.000+0700","friendly":"Today
+            02:15
+            AM","epochMillis":1444504523000},"breachTime":{"iso8601":"2015-10-11T01:12:23+0700","jira":"2015-10-11T01:12:23.000+0700","friendly":"Today
+            01:12
+            AM","epochMillis":1444500743000},"breached":true,"goalDuration":{"millis":72000000,"friendly":"20h
+            1200m"},"elapsedTime":{"millis":19380000,"friendly":"5h
+            323m"},"remainingTime":{"millis":52620000,"friendly":"14h
+            877m"}}],"ongoingCycle":{"startTime":{"iso8601":"2015-10-11T05:15:23+0700","jira":"2015-10-11T05:15:23.000+0700","friendly":"Today
+            05:15
+            AM","epochMillis":1444515323000},"breached":false,"paused":false,"withinCalendarHours":false,"goalDuration":{"millis":72000000,"friendly":"20h
+            1200m"},"elapsedTime":{"millis":5640000,"friendly":"1h
+            94m"},"remainingTime":{"millis":66360000,"friendly":"18h
+            1106m"}}},{"name":"Time To
+            Retrospective","_links":{"self":"https://your-domain.atlassian.net/rest/servicedeskapi/request/101102/sla/10050"},"completedCycles":[{"startTime":{"iso8601":"2015-10-09T10:45:23+0700","jira":"2015-10-09T10:45:23.000+0700","friendly":"Yesterday
+            10:45
+            AM","epochMillis":1444362323000},"stopTime":{"iso8601":"2015-10-10T10:52:23+0700","jira":"2015-10-10T10:52:23.000+0700","friendly":"Yesterday
+            10:52
+            AM","epochMillis":1444449143000},"breachTime":{"iso8601":"2015-10-10T10:50:23+0700","jira":"2015-10-10T10:50:23.000+0700","friendly":"Yesterday
+            10:50
+            AM","epochMillis":1444449023000},"breached":false,"goalDuration":{"millis":144000000,"friendly":"40h
+            2400m"},"elapsedTime":{"millis":86820000,"friendly":"24h
+            1447m"},"remainingTime":{"millis":57180000,"friendly":"15h
+            953m"}},{"startTime":{"iso8601":"2015-10-11T10:52:23+0700","jira":"2015-10-11T10:52:23.000+0700","friendly":"Today
+            10:52
+            AM","epochMillis":1444535543000},"stopTime":{"iso8601":"2015-10-11T16:15:23+0700","jira":"2015-10-11T16:15:23.000+0700","friendly":"Today
+            16:15
+            PM","epochMillis":1444554923000},"breachTime":{"iso8601":"2015-10-11T15:12:23+0700","jira":"2015-10-11T15:12:23.000+0700","friendly":"Today
+            15:12
+            PM","epochMillis":1444551143000},"breached":true,"goalDuration":{"millis":144000000,"friendly":"40h
+            2400m"},"elapsedTime":{"millis":19380000,"friendly":"5h
+            323m"},"remainingTime":{"millis":124620000,"friendly":"34h
+            2077m"}}],"ongoingCycle":{"startTime":{"iso8601":"2015-10-11T19:15:23+0700","jira":"2015-10-11T19:15:23.000+0700","friendly":"Today
+            19:15
+            PM","epochMillis":1444565723000},"breached":false,"paused":false,"withinCalendarHours":false,"goalDuration":{"millis":144000000,"friendly":"40h
+            2400m"},"elapsedTime":{"millis":5640000,"friendly":"1h
+            94m"},"remainingTime":{"millis":138360000,"friendly":"38h
+            2306m"}}}]}
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the customer request does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - read:jira-work
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - read:jira-work
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:request.sla:jira-service-management
+  x-atlassian-connect-scope: READ

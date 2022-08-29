@@ -1,0 +1,25 @@
+type: object
+properties:
+  filename:
+    type: string
+    description: Filename of the item attached.
+  author:
+    description: Details of the user who attached the file.
+    allOf:
+      - $ref: ./UserDTO.yaml
+  created:
+    description: Date the attachment was added.
+    allOf:
+      - $ref: ./DateDTO.yaml
+  size:
+    type: integer
+    description: Size of the attachment in bytes.
+    format: int64
+  mimeType:
+    type: string
+    description: MIME type of the attachment.
+  _links:
+    description: Various URLs for the attachment.
+    allOf:
+      - $ref: ./AttachmentLinkDTO.yaml
+additionalProperties: false

@@ -1,0 +1,10 @@
+type: object
+properties:
+  millis:
+    type: integer
+    description: Duration in milliseconds.
+    format: int64
+  friendly:
+    type: string
+    description: Duration in a user-friendly text format.
+additionalProperties: false

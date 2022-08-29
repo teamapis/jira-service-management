@@ -1,0 +1,10 @@
+type: object
+properties:
+  id:
+    type: string
+    description: ID of the transition to be performed.
+  additionalComment:
+    description: Comment explaining the reason for the transition.
+    allOf:
+      - $ref: ./AdditionalCommentDTO.yaml
+additionalProperties: false

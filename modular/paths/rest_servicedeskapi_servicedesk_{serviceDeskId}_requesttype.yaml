@@ -1,0 +1,208 @@
+get:
+  tags:
+    - Servicedesk
+  summary: Get request types
+  description: >-
+    This method returns all customer request types from a service desk. There
+    are two parameters for filtering the returned list:
+
+     *  `groupId` which filters the results to items in the customer request type group.
+     *  `searchQuery` which is matched against request types' `name` or `description`. For example, the strings "Install", "Inst", "Equi", or "Equipment" will match a request type with the *name* "Equipment Installation Request".
+
+    **[Permissions](#permissions) required**: Permission to access the service
+    desk.
+  operationId: getRequestTypes
+  parameters:
+    - name: serviceDeskId
+      in: path
+      description: >-
+        The ID of the service desk whose customer request types are to be
+        returned. This can alternatively be a [project
+        identifier.](#project-identifiers)
+      required: true
+      schema:
+        type: string
+    - name: groupId
+      in: query
+      description: Filters results to those in a customer request type group.
+      schema:
+        type: integer
+        format: int32
+    - name: expand
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+    - name: searchQuery
+      in: query
+      description: The string to be used to filter the results.
+      schema:
+        type: string
+    - name: start
+      in: query
+      description: >-
+        The starting index of the returned objects. Base index: 0. See the
+        [Pagination](#pagination) section for more details.
+      schema:
+        type: integer
+        format: int32
+    - name: limit
+      in: query
+      description: >-
+        The maximum number of items to return per page. Default: 100. See the
+        [Pagination](#pagination) section for more details.
+      schema:
+        type: integer
+        format: int32
+  responses:
+    '200':
+      description: >-
+        Returns the requested customer request types, on the specified page of
+        the results.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/PagedDTORequestTypeDTO.yaml
+          example: >-
+            {"_expands":[],"size":3,"start":3,"limit":3,"isLastPage":false,"_links":{"base":"https://your-domain.atlassian.net/rest/servicedeskapi","context":"context","next":"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype?start=6&limit=3","prev":"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype?start=0&limit=3"},"values":[{"_expands":[],"id":"11001","_links":{"self":"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype/11001"},"name":"Get
+            IT Help","description":"Get IT Help","helpText":"Please tell us
+            clearly the problem you have within 100
+            words.","issueTypeId":"12345","serviceDeskId":"28","portalId":"2","groupIds":["12"],"icon":{"id":"12345","_links":{"iconUrls":{"48x48":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=large","24x24":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=small","16x16":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=xsmall","32x32":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=medium"}}}},{"_expands":[],"id":"11002","_links":{"self":"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype/11002"},"name":"Request
+            a new account","description":"Request a new
+            account","issueTypeId":"12345","serviceDeskId":"28","portalId":"2","groupIds":["13","14"],"icon":{"id":"12346","_links":{"iconUrls":{"48x48":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12346?size=large","24x24":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12346?size=small","16x16":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12346?size=xsmall","32x32":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12346?size=medium"}}}},{"_expands":[],"id":"11003","_links":{"self":"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype/11003"},"name":"Hardware
+            request","description":"Request a hardware
+            support","issueTypeId":"12345","serviceDeskId":"28","portalId":"2","groupIds":["13"],"icon":{"id":"12347","_links":{"iconUrls":{"48x48":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12347?size=large","24x24":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12347?size=small","16x16":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12347?size=xsmall","32x32":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12347?size=medium"}}}}]}
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the service desk does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - read:servicedesk-request
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - read:servicedesk-request
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:requesttype:jira-service-management
+  x-atlassian-connect-scope: READ
+post:
+  tags:
+    - Servicedesk
+  summary: Create request type
+  description: >-
+    This method enables a customer request type to be added to a service desk
+    based on an issue type. Note that not all customer request type fields can
+    be specified in the request and these fields are given the following default
+    values:
+
+     *  Request type icon is given the headset icon.
+     *  Request type groups is left empty, which means this customer request type will not be visible on the [customer portal](https://confluence.atlassian.com/servicedeskcloud/configuring-the-customer-portal-732528918.html).
+     *  Request type status mapping is left empty, so the request type has no custom status mapping but inherits the status map from the issue type upon which it is based.
+     *  Request type field mapping is set to show the required fields as specified by the issue type used to create the customer request type.
+
+      
+    These fields can be updated by a service desk administrator using the
+    **Request types** option in **Project settings**.  
+
+    Request Types are created in next-gen projects by creating Issue Types.
+    Please use the Jira Cloud Platform Create issue type endpoint instead.
+
+
+    **[Permissions](#permissions) required**: Service desk's administrator
+  operationId: createRequestType
+  parameters:
+    - name: serviceDeskId
+      in: path
+      description: >-
+        The ID of the service desk where the customer request type is to be
+        created. This can alternatively be a [project
+        identifier.](#project-identifiers)
+      required: true
+      schema:
+        type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/RequestTypeCreateDTO.yaml
+        example:
+          issueTypeId: '12345'
+          helpText: Please tell us clearly the problem you have within 100 words.
+          name: Get IT Help
+          description: Get IT Help
+    required: true
+  responses:
+    '200':
+      description: Returns the customer request type created.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/RequestTypeDTO.yaml
+          example: >-
+            {"_expands":[],"id":"11001","_links":{"self":"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype/11001"},"name":"Get
+            IT Help","description":"Get IT Help","helpText":"Please tell us
+            clearly the problem you have within 100
+            words.","issueTypeId":"12345","serviceDeskId":"28","portalId":"2","groupIds":["12"],"icon":{"id":"12345","_links":{"iconUrls":{"48x48":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=large","24x24":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=small","16x16":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=xsmall","32x32":"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=medium"}}}}
+    '400':
+      description: Returned if the customer request type name is empty.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the service desk or issue type do not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - read:requesttype:jira-service-management
+        - write:requesttype:jira-service-management
+  x-experimental: true
+  x-atlassian-connect-scope: PROJECT_ADMIN

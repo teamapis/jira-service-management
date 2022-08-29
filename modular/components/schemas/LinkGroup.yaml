@@ -1,0 +1,21 @@
+type: object
+properties:
+  id:
+    type: string
+  styleClass:
+    type: string
+  header:
+    $ref: ./SimpleLink.yaml
+  weight:
+    type: integer
+    format: int32
+  links:
+    type: array
+    items:
+      $ref: ./SimpleLink.yaml
+  groups:
+    type: array
+    items:
+      $ref: ./LinkGroup.yaml
+additionalProperties: false
+description: Details a link group, which defines issue operations.

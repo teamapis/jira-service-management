@@ -1,0 +1,17 @@
+type: object
+properties:
+  self:
+    type: string
+    format: uri
+  jiraRest:
+    type: string
+    description: REST API URL for the customer.
+    format: uri
+  avatarUrls:
+    type: object
+    additionalProperties:
+      type: string
+    description: >-
+      Links to the various sizes of the customer's avatar. Note that this
+      property is deprecated, and will be removed in future versions.
+additionalProperties: false

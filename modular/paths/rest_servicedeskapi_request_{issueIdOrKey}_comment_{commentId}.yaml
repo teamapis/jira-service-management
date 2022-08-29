@@ -1,0 +1,95 @@
+get:
+  tags:
+    - Request
+  summary: Get request comment by id
+  description: >-
+    This method returns details of a customer request's comment.
+
+
+    **[Permissions](#permissions) required**: Permission to view the customer
+    request.
+
+
+    **Response limitations**: Customers can only view public comments on
+    requests where they are the reporter or a participant whereas agents can see
+    both internal and public comments.
+  operationId: getRequestCommentById
+  parameters:
+    - name: issueIdOrKey
+      in: path
+      description: The ID or key of the customer request that contains the comment.
+      required: true
+      schema:
+        type: string
+    - name: commentId
+      in: path
+      description: The ID of the comment to retrieve.
+      required: true
+      schema:
+        type: integer
+        format: int64
+    - name: expand
+      in: query
+      description: >-
+        A multi-value parameter indicating which properties of the comment to
+        expand:
+
+         *  `attachment` returns the attachment details, if any, for the comment. (If you want to get all attachments for a request, use [servicedeskapi/request/\{issueIdOrKey\}/attachment](#api-request-issueIdOrKey-attachment-get).)
+         *  `renderedBody` (Experimental) returns the rendered body in HTML format (in addition to the raw body) of the comment.
+      schema:
+        type: array
+        items:
+          type: string
+  responses:
+    '200':
+      description: Returns the comment.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/CommentDTO.yaml
+          example: >-
+            {"_expands":["attachment","renderedBody"],"id":"1000","body":"Hello
+            there","public":true,"author":{"accountId":"qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","name":"qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","key":"qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","emailAddress":"fred@example.com","displayName":"Fred
+            F.
+            User","active":true,"timeZone":"Australia/Sydney","_links":{"jiraRest":"https://your-domain.atlassian.net/rest/api/2/user?username=qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b","avatarUrls":{"48x48":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=48&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue","24x24":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=24&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D24%26noRedirect%3Dtrue","16x16":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=16&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D16%26noRedirect%3Dtrue","32x32":"https://avatar-cdn.atlassian.com/9bc3b5bcb0db050c6d7660b28a5b86c9?s=32&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F9bc3b5bcb0db050c6d7660b28a5b86c9%3Fd%3Dmm%26s%3D32%26noRedirect%3Dtrue"},"self":"https://your-domain.atlassian.net/rest/api/2/user?username=qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d3581db05e2a66fa80b"}},"created":{"iso8601":"2015-10-09T10:22:00+0700","jira":"2015-10-09T10:22:00.000+0700","friendly":"Today
+            10:22
+            AM","epochMillis":1444360920000},"_links":{"self":"https://your-domain.atlassian.net/rest/servicedeskapi/request/2000/comment/1000"}}
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the customer request or comment do not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - read:servicedesk-request
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - read:servicedesk-request
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:request.comment:jira-service-management
+        - read:user:jira
+  x-atlassian-connect-scope: READ

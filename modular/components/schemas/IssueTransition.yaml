@@ -1,0 +1,57 @@
+type: object
+properties:
+  id:
+    type: string
+    description: >-
+      The ID of the issue transition. Required when specifying a transition to
+      undertake.
+  name:
+    type: string
+    description: The name of the issue transition.
+    readOnly: true
+  to:
+    description: Details of the issue status after the transition.
+    readOnly: true
+    allOf:
+      - $ref: ./StatusDetails.yaml
+  hasScreen:
+    type: boolean
+    description: Whether there is a screen associated with the issue transition.
+    readOnly: true
+  isGlobal:
+    type: boolean
+    description: >-
+      Whether the issue transition is global, that is, the transition is applied
+      to issues regardless of their status.
+    readOnly: true
+  isInitial:
+    type: boolean
+    description: Whether this is the initial issue transition for the workflow.
+    readOnly: true
+  isAvailable:
+    type: boolean
+    description: Whether the transition is available to be performed.
+    readOnly: true
+  isConditional:
+    type: boolean
+    description: >-
+      Whether the issue has to meet criteria before the issue transition is
+      applied.
+    readOnly: true
+  fields:
+    type: object
+    additionalProperties:
+      $ref: ./FieldMetadata.yaml
+    description: >-
+      Details of the fields associated with the issue transition screen. Use
+      this information to populate `fields` and `update` in a transition
+      request.
+    readOnly: true
+  expand:
+    type: string
+    description: Expand options that include additional transition details in the response.
+    readOnly: true
+  looped:
+    type: boolean
+additionalProperties: true
+description: Details of an issue transition.

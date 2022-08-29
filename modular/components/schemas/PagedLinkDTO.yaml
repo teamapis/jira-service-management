@@ -1,0 +1,21 @@
+type: object
+properties:
+  self:
+    type: string
+    description: REST API URL for the current page.
+    format: uri
+  base:
+    type: string
+    description: Base URL for the REST API calls.
+    format: uri
+  context:
+    type: string
+  next:
+    type: string
+    description: REST API URL for the next page, if there is one.
+    format: uri
+  prev:
+    type: string
+    description: REST API URL for the previous page, if there is one.
+    format: uri
+additionalProperties: false

@@ -1,0 +1,95 @@
+get:
+  tags:
+    - Request
+  summary: Get sla information by id
+  description: >-
+    This method returns the details for an SLA on a customer request.
+
+
+    **[Permissions](#permissions) required**: Agent for the Service Desk
+    containing the queried customer request.
+  operationId: getSlaInformationById
+  parameters:
+    - name: issueIdOrKey
+      in: path
+      description: The ID or key of the customer request whose SLAs will be retrieved.
+      required: true
+      schema:
+        type: string
+    - name: slaMetricId
+      in: path
+      description: The ID or key of the SLAs metric to be retrieved.
+      required: true
+      schema:
+        type: integer
+        format: int64
+  responses:
+    '200':
+      description: Returns the SLA record, on the specified page of the results.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/SlaInformationDTO.yaml
+          example: >-
+            {"name":"Time To First
+            Response","_links":{"self":"https://your-domain.atlassian.net/rest/servicedeskapi/request/101102/sla/10030"},"completedCycles":[{"startTime":{"iso8601":"2015-10-09T10:45:23+0700","jira":"2015-10-09T10:45:23.000+0700","friendly":"Yesterday
+            10:45
+            AM","epochMillis":1444362323000},"stopTime":{"iso8601":"2015-10-09T10:52:23+0700","jira":"2015-10-09T10:52:23.000+0700","friendly":"Yesterday
+            10:52
+            AM","epochMillis":1444362743000},"breachTime":{"iso8601":"2015-10-09T10:50:23+0700","jira":"2015-10-09T10:50:23.000+0700","friendly":"Yesterday
+            10:50
+            AM","epochMillis":1444362623000},"breached":false,"goalDuration":{"millis":14400000,"friendly":"4h
+            240m"},"elapsedTime":{"millis":420000,"friendly":"0h
+            7m"},"remainingTime":{"millis":13980000,"friendly":"3h
+            233m"}},{"startTime":{"iso8601":"2015-10-10T10:52:23+0700","jira":"2015-10-10T10:52:23.000+0700","friendly":"Today
+            10:52
+            AM","epochMillis":1444449143000},"stopTime":{"iso8601":"2015-10-10T16:15:23+0700","jira":"2015-10-10T16:15:23.000+0700","friendly":"Today
+            16:15
+            PM","epochMillis":1444468523000},"breachTime":{"iso8601":"2015-10-10T15:12:23+0700","jira":"2015-10-10T15:12:23.000+0700","friendly":"Today
+            15:12
+            PM","epochMillis":1444464743000},"breached":true,"goalDuration":{"millis":14400000,"friendly":"4h
+            240m"},"elapsedTime":{"millis":19380000,"friendly":"5h
+            323m"},"remainingTime":{"millis":-4980000,"friendly":"-1h
+            -83m"}}],"ongoingCycle":{"startTime":{"iso8601":"2015-10-10T19:15:23+0700","jira":"2015-10-10T19:15:23.000+0700","friendly":"Today
+            19:15
+            PM","epochMillis":1444479323000},"breached":false,"paused":false,"withinCalendarHours":false,"goalDuration":{"millis":14400000,"friendly":"4h
+            240m"},"elapsedTime":{"millis":5640000,"friendly":"1h
+            94m"},"remainingTime":{"millis":8760000,"friendly":"2h 146m"}}}
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the customer request does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - read:jira-work
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - read:jira-work
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:request.sla:jira-service-management
+  x-atlassian-connect-scope: READ

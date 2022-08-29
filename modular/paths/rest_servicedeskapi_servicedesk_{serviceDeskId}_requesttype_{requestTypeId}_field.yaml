@@ -1,0 +1,98 @@
+get:
+  tags:
+    - Servicedesk
+  summary: Get request type fields
+  description: >-
+    This method returns the fields for a service desk's customer request type.
+
+
+    Also, the following information about the user's permissions for the request
+    type is returned:
+
+     *  `canRaiseOnBehalfOf` returns `true` if the user has permission to raise customer requests on behalf of other customers. Otherwise, returns `false`.
+     *  `canAddRequestParticipants` returns `true` if the user can add customer request participants. Otherwise, returns `false`.
+
+    **[Permissions](#permissions) required**: Permission to view the Service
+    Desk. However, hidden fields would be visible to only Service desk's
+    Administrator.
+  operationId: getRequestTypeFields
+  parameters:
+    - name: serviceDeskId
+      in: path
+      description: >-
+        The ID of the service desk containing the request types whose fields are
+        to be returned. This can alternatively be a [project
+        identifier.](#project-identifiers)
+      required: true
+      schema:
+        type: string
+    - name: requestTypeId
+      in: path
+      description: The ID of the request types whose fields are to be returned.
+      required: true
+      schema:
+        type: integer
+        format: int32
+    - name: expand
+      in: query
+      description: >-
+        Use [expand](#expansion) to include additional information in the
+        response. This parameter accepts `hiddenFields` that returns hidden
+        fields associated with the request type.
+      schema:
+        type: array
+        items:
+          type: string
+  responses:
+    '200':
+      description: >-
+        Returns the request type's fields and user permission details, on the
+        specified page of the results.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/CustomerRequestCreateMetaDTO.yaml
+          example: >-
+            {"requestTypeFields":[{"fieldId":"summary","name":"What do you
+            need?","required":true,"validValues":[],"jiraSchema":{"type":"string","system":"summary"},"visible":true},{"fieldId":"customfield_10000","name":"Nominee","required":true,"validValues":[],"jiraSchema":{"type":"user","custom":"com.atlassian.jira.plugin.system.customfieldtypes:userpicker","customId":10000},"visible":true},{"fieldId":"customfield_10001","name":"Gifts","required":true,"validValues":[{"value":"10000","label":"Bottle
+            of Wine","children":[]},{"value":"10001","label":"Threadless
+            Voucher","children":[]},{"value":"10002","label":"2 Movie
+            Tickets","children":[]}],"jiraSchema":{"type":"string","custom":"com.atlassian.jira.plugin.system.customfieldtypes:radiobuttons","customId":10001},"visible":false}],"canRaiseOnBehalfOf":true,"canAddRequestParticipants":true}
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the service desk or request type do not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - read:servicedesk-request
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - read:servicedesk-request
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:requesttype:jira-service-management
+  x-atlassian-connect-scope: READ

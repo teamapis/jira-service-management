@@ -1,0 +1,243 @@
+get:
+  tags:
+    - Organization
+  summary: Get organizations
+  description: >-
+    This method returns a list of all organizations associated with a service
+    desk.
+
+
+    **[Permissions](#permissions) required**: Service desk's agent.
+  operationId: getOrganizations
+  parameters:
+    - name: serviceDeskId
+      in: path
+      description: >-
+        The ID of the service desk from which the organization list will be
+        returned. This can alternatively be a [project
+        identifier.](#project-identifiers)
+      required: true
+      schema:
+        type: string
+    - name: start
+      in: query
+      description: >-
+        The starting index of the returned objects. Base index: 0. See the
+        [Pagination](#pagination) section for more details.
+      schema:
+        type: integer
+        format: int32
+    - name: limit
+      in: query
+      description: >-
+        The maximum number of items to return per page. Default: 50. See the
+        [Pagination](#pagination) section for more details.
+      schema:
+        type: integer
+        format: int32
+    - name: accountId
+      in: query
+      description: >-
+        The account ID of the user, which uniquely identifies the user across
+        all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Returns the requested organizations list.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/PagedDTOOrganizationDTO.yaml
+          example: >-
+            {"_expands":[],"size":3,"start":3,"limit":3,"isLastPage":false,"_links":{"base":"https://your-domain.atlassian.net/rest/servicedeskapi","context":"context","next":"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/10001/organization?start=6&limit=3","prev":"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/10001/organization?start=0&limit=3"},"values":[{"id":"1","name":"Charlie
+            Cakes
+            Franchises","_links":{"self":"https://your-domain.atlassian.net/rest/servicedeskapi/organization/1"}},{"id":"2","name":"Atlas
+            Coffee
+            Co","_links":{"self":"https://your-domain.atlassian.net/rest/servicedeskapi/organization/2"}},{"id":"3","name":"The
+            Adjustment
+            Bureau","_links":{"self":"https://your-domain.atlassian.net/rest/servicedeskapi/organization/3"}}]}
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if user does not have the necessary permission.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the service desk does not exist or the user is not found.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - manage:servicedesk-customer
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - manage:servicedesk-customer
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:servicedesk.organization:jira-service-management
+  x-atlassian-connect-scope: READ
+post:
+  tags:
+    - Organization
+  summary: Add organization
+  description: >-
+    This method adds an organization to a service desk. If the organization ID
+    is already associated with the service desk, no change is made and the
+    resource returns a 204 success code.
+
+
+    **[Permissions](#permissions) required**: Service desk's agent.
+  operationId: addOrganization
+  parameters:
+    - name: serviceDeskId
+      in: path
+      description: >-
+        The ID of the service desk to which the organization will be added. This
+        can alternatively be a [project identifier.](#project-identifiers)
+      required: true
+      schema:
+        type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/OrganizationServiceDeskUpdateDTO.yaml
+        example:
+          organizationId: 1
+    required: true
+  responses:
+    '204':
+      description: >-
+        Returned if the organization was added or the organization was already
+        associated with the service desk.
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the service desk or organization do not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - manage:servicedesk-customer
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - manage:servicedesk-customer
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:servicedesk.organization:jira-service-management
+        - write:servicedesk.organization:jira-service-management
+  x-atlassian-connect-scope: WRITE
+delete:
+  tags:
+    - Organization
+  summary: Remove organization
+  description: >-
+    This method removes an organization from a service desk. If the organization
+    ID does not match an organization associated with the service desk, no
+    change is made and the resource returns a 204 success code.
+
+
+    **[Permissions](#permissions) required**: Service desk's agent.
+  operationId: removeOrganization
+  parameters:
+    - name: serviceDeskId
+      in: path
+      description: >-
+        The ID of the service desk from which the organization will be removed.
+        This can alternatively be a [project identifier.](#project-identifiers)
+      required: true
+      schema:
+        type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/OrganizationServiceDeskUpdateDTO.yaml
+        example:
+          organizationId: 1
+    required: true
+  responses:
+    '204':
+      description: >-
+        Returned if the organization was removed from the service desk or no
+        such organization was associated with the service desk.
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the service desk or organization do not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - manage:servicedesk-customer
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - manage:servicedesk-customer
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:servicedesk.organization:jira-service-management
+        - delete:servicedesk.organization:jira-service-management
+  x-atlassian-connect-scope: DELETE

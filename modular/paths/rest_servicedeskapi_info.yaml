@@ -1,0 +1,36 @@
+get:
+  tags:
+    - Info
+  summary: Get info
+  description: >-
+    This method retrieves information about the Jira Service Management instance
+    such as software version, builds, and related links.
+
+
+    **[Permissions](#permissions) required**: None, the user does not need to be
+    logged in.
+  operationId: getInfo
+  responses:
+    '200':
+      description: >-
+        Returns the runtime information for the Jira Service Management
+        instance.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/SoftwareInfoDTO.yaml
+          example: >-
+            {"version":"3.0.1","platformVersion":"7.0.1","buildDate":{"iso8601":"2015-09-15T02:34:00+0700","jira":"2015-09-15T02:34:00.000+0700","friendly":"Monday
+            02:34
+            AM","epochMillis":1442259240000},"buildChangeSet":"c6679417c550918e7c94a9eaaada133f15dc8ff0","isLicensedForUse":true,"_links":{"self":"https://your-domain.atlassian.net/rest/servicedeskapi/info"}}
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2: []
+    - {}
+  x-atlassian-connect-scope: READ

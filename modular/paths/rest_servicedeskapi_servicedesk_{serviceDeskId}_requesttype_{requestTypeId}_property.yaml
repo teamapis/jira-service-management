@@ -1,0 +1,82 @@
+get:
+  tags:
+    - Servicedesk
+  summary: Get properties keys
+  description: >-
+    Returns the keys of all properties for a request type.
+
+
+    Properties for a Request Type in next-gen are stored as Issue Type
+    properties and therefore the keys of all properties for a request type are
+    also available by calling the Jira Cloud Platform [Get issue type property
+    keys](https://developer.atlassian.com/cloud/jira/platform/rest/v3/#api-rest-api-3-issuetype-issueTypeId-properties-get)
+    endpoint.
+
+
+    **[Permissions](#permissions) required**: The user must have permission to
+    view the request type.
+  operationId: getPropertiesKeys
+  parameters:
+    - name: requestTypeId
+      in: path
+      description: The ID of the request type for which keys will be retrieved.
+      required: true
+      schema:
+        type: integer
+        format: int32
+    - name: serviceDeskId
+      in: path
+      description: >-
+        The ID of the service desk which contains the request type. This can
+        alternatively be a [project identifier.](#project-identifiers)
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Returned if the request type was found.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/PropertyKeys.yaml
+          example: >-
+            {"keys":[{"self":"/rest/servicedeskapi/servicedesk/1/requestType/2/property/propertyKey","key":"requestType.attributes"}]}
+    '400':
+      description: Returned if the request type ID is invalid.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the request type does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - read:servicedesk-request
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - read:servicedesk-request
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:requesttype.property:jira-service-management
+  x-experimental: true
+  x-atlassian-connect-scope: INACCESSIBLE

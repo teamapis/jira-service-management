@@ -1,0 +1,9 @@
+type: object
+properties:
+  i18nKey:
+    type: string
+  parameters:
+    type: array
+    items:
+      type: string
+additionalProperties: false

@@ -1,0 +1,12 @@
+type: object
+properties:
+  email:
+    type: string
+    description: Customer's email address.
+  fullName:
+    type: string
+    description: Deprecated, please use 'displayName'.
+  displayName:
+    type: string
+    description: Customer's name for display in the UI.
+additionalProperties: false

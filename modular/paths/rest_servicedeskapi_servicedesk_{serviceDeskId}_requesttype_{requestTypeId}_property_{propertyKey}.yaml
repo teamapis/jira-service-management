@@ -1,0 +1,281 @@
+get:
+  tags:
+    - Servicedesk
+  summary: Get property
+  description: >-
+    Returns the value of the property from a request type.
+
+
+    Properties for a Request Type in next-gen are stored as Issue Type
+    properties and therefore also available by calling the Jira Cloud Platform
+    [Get issue type
+    property](https://developer.atlassian.com/cloud/jira/platform/rest/v3/#api-rest-api-3-issuetype-issueTypeId-properties-propertyKey-get)
+    endpoint.
+
+
+    **[Permissions](#permissions) required**: User must have permission to view
+    the request type.
+  operationId: getProperty
+  parameters:
+    - name: serviceDeskId
+      in: path
+      description: >-
+        The ID of the service desk which contains the request type. This can
+        alternatively be a [project identifier.](#project-identifiers)
+      required: true
+      schema:
+        type: string
+    - name: requestTypeId
+      in: path
+      description: The ID of the request type from which the property will be retrieved.
+      required: true
+      schema:
+        type: integer
+        format: int32
+    - name: propertyKey
+      in: path
+      description: The key of the property to return.
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Returned if the request type property was returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/EntityProperty.yaml
+          example: >-
+            {"key":"organization.attributes","value":{"priority":"high","color":"green"}}
+    '400':
+      description: Returned if the request type ID is invalid.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the request type or property do not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - read:servicedesk-request
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - read:servicedesk-request
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:requesttype.property:jira-service-management
+  x-experimental: true
+  x-atlassian-connect-scope: INACCESSIBLE
+put:
+  tags:
+    - Servicedesk
+  summary: Set property
+  description: >-
+    Sets the value of a request type property. Use this resource to store custom
+    data against a request type.
+
+
+    Properties for a Request Type in next-gen are stored as Issue Type
+    properties and therefore can also be set by calling the Jira Cloud Platform
+    [Set issue type
+    property](https://developer.atlassian.com/cloud/jira/platform/rest/v3/#api-rest-api-3-issuetype-issueTypeId-properties-propertyKey-put)
+    endpoint.
+
+
+    **[Permissions](#permissions) required**: Jira project administrator with a
+    Jira Service Management agent license.
+  operationId: setProperty
+  parameters:
+    - name: serviceDeskId
+      in: path
+      description: >-
+        The ID of the service desk which contains the request type. This can
+        alternatively be a [project identifier.](#project-identifiers)
+      required: true
+      schema:
+        type: string
+    - name: requestTypeId
+      in: path
+      description: The ID of the request type on which the property will be set.
+      required: true
+      schema:
+        type: integer
+        format: int32
+    - name: propertyKey
+      in: path
+      description: >-
+        The key of the request type property. The maximum length of the key is
+        255 bytes.
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Returned if the request type property is updated.
+      content:
+        application/json:
+          schema: {}
+    '201':
+      description: Returned if the request type property is created.
+      content:
+        application/json:
+          schema: {}
+    '400':
+      description: Returned if the request type ID is invalid.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: >-
+        Returned if the calling user doesn't have permission to complete this
+        request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the request type does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - manage:jira-project
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - manage:jira-project
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:requesttype.property:jira-service-management
+        - write:requesttype.property:jira-service-management
+  x-experimental: true
+  x-atlassian-connect-scope: INACCESSIBLE
+delete:
+  tags:
+    - Servicedesk
+  summary: Delete property
+  description: >-
+    Removes a property from a request type.
+
+
+    Properties for a Request Type in next-gen are stored as Issue Type
+    properties and therefore can also be deleted by calling the Jira Cloud
+    Platform [Delete issue type
+    property](https://developer.atlassian.com/cloud/jira/platform/rest/v3/#api-rest-api-3-issuetype-issueTypeId-properties-propertyKey-delete)
+    endpoint.
+
+
+    **[Permissions](#permissions) required**: Jira project administrator with a
+    Jira Service Management agent license.
+  operationId: deleteProperty
+  parameters:
+    - name: serviceDeskId
+      in: path
+      description: >-
+        The ID of the service desk which contains the request type. This can
+        alternatively be a [project identifier.](#project-identifiers)
+      required: true
+      schema:
+        type: string
+    - name: requestTypeId
+      in: path
+      description: The ID of the request type for which the property will be removed.
+      required: true
+      schema:
+        type: integer
+        format: int32
+    - name: propertyKey
+      in: path
+      description: The key of the property to remove.
+      required: true
+      schema:
+        type: string
+  responses:
+    '204':
+      description: Returned if the request type property was removed.
+    '400':
+      description: Returned if the request type ID is invalid.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: >-
+        Returned if the calling user doesn't have permission to complete this
+        request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the request type or property do not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - manage:jira-project
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - manage:jira-project
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:requesttype.property:jira-service-management
+        - delete:requesttype.property:jira-service-management
+  x-experimental: true
+  x-atlassian-connect-scope: INACCESSIBLE

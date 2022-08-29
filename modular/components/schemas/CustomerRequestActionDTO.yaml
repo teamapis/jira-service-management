@@ -1,0 +1,6 @@
+type: object
+properties:
+  allowed:
+    type: boolean
+    description: Indicates whether the user can undertake the action (true) or not (false).
+additionalProperties: false

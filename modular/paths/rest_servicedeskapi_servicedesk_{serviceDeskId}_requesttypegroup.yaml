@@ -1,0 +1,91 @@
+get:
+  tags:
+    - Servicedesk
+  summary: Get request type groups
+  description: >-
+    This method returns a service desk's customer request type groups. Jira
+    Service Management administrators can arrange the customer request type
+    groups in an arbitrary order for display on the customer portal; the groups
+    are returned in this order.
+
+
+    **[Permissions](#permissions) required**: Permission to view the service
+    desk.
+  operationId: getRequestTypeGroups
+  parameters:
+    - name: serviceDeskId
+      in: path
+      description: >-
+        The ID of the service desk whose customer request type groups are to be
+        returned. This can alternatively be a [project
+        identifier.](#project-identifiers)
+      required: true
+      schema:
+        type: string
+    - name: start
+      in: query
+      description: >-
+        The starting index of the returned objects. Base index: 0. See the
+        [Pagination](#pagination) section for more details.
+      schema:
+        type: integer
+        format: int32
+    - name: limit
+      in: query
+      description: >-
+        The maximum number of items to return per page. Default: 100. See the
+        [Pagination](#pagination) section for more details.
+      schema:
+        type: integer
+        format: int32
+  responses:
+    '200':
+      description: >-
+        Returns the service desk's customer request type groups, on the
+        specified page of the results.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/PagedDTORequestTypeGroupDTO.yaml
+          example: >-
+            {"_expands":[],"size":3,"start":3,"limit":3,"isLastPage":false,"_links":{"base":"https://your-domain.atlassian.net/rest/servicedeskapi","context":"context","next":"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk//requesttypegroup?start=6&limit=3","prev":"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk//requesttypegroup?start=0&limit=3"},"values":[{"id":"12","name":"Common
+            Requests"},{"id":"13","name":"Logins and
+            Accounts"},{"id":"14","name":"Servers and Infrastructure"}]}
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the service desk does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - read:servicedesk-request
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - read:servicedesk-request
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:requesttype:jira-service-management
+  x-atlassian-connect-scope: READ

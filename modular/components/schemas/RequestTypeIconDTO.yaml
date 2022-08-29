@@ -1,0 +1,10 @@
+type: object
+properties:
+  id:
+    type: string
+    description: ID of the request type icon.
+  _links:
+    description: Map of the URLs for the request type icons.
+    allOf:
+      - $ref: ./RequestTypeIconLinkDTO.yaml
+additionalProperties: false

@@ -1,0 +1,15 @@
+type: object
+properties:
+  issueTypeId:
+    type: string
+    description: ID of the request type to add to the service desk.
+  name:
+    type: string
+    description: Name of the request type on the service desk.
+  description:
+    type: string
+    description: Description of the request type on the service desk.
+  helpText:
+    type: string
+    description: Help text for the request type on the service desk.
+additionalProperties: false

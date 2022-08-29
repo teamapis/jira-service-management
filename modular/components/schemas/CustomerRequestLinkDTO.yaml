@@ -1,0 +1,18 @@
+type: object
+properties:
+  self:
+    type: string
+    format: uri
+  jiraRest:
+    type: string
+    description: REST API URL for the request.
+    format: uri
+  web:
+    type: string
+    description: Web URL for the request.
+    format: uri
+  agent:
+    type: string
+    description: Jira agent view URL for the request.
+    format: uri
+additionalProperties: false

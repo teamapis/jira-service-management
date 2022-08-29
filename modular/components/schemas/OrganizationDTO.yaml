@@ -1,0 +1,13 @@
+type: object
+properties:
+  id:
+    type: string
+    description: A unique system generated ID for the organization.
+  name:
+    type: string
+    description: Name of the organization.
+  _links:
+    description: REST API URL to the organization.
+    allOf:
+      - $ref: ./SelfLinkDTO.yaml
+additionalProperties: false

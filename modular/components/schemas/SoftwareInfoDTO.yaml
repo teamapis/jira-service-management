@@ -1,0 +1,23 @@
+type: object
+properties:
+  version:
+    type: string
+    description: Jira Service Management version.
+  platformVersion:
+    type: string
+    description: Jira Platform version upon which Service Desk is based.
+  buildDate:
+    description: Date of the current build.
+    allOf:
+      - $ref: ./DateDTO.yaml
+  buildChangeSet:
+    type: string
+    description: Reference of the change set included in the build.
+  isLicensedForUse:
+    type: boolean
+    description: Indicates whether the instance is licensed (true) or not (false).
+  _links:
+    description: REST API URL of the instance.
+    allOf:
+      - $ref: ./SelfLinkDTO.yaml
+additionalProperties: false

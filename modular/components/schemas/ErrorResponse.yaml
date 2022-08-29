@@ -1,0 +1,7 @@
+type: object
+properties:
+  errorMessage:
+    type: string
+  i18nErrorMessage:
+    $ref: ./I18nErrorMessage.yaml
+additionalProperties: false

@@ -1,0 +1,70 @@
+get:
+  tags:
+    - Servicedesk
+  summary: Get service desks
+  description: >-
+    This method returns all the service desks in the Jira Service Management
+    instance that the user has permission to access. Use this method where you
+    need a list of service desks or need to locate a service desk by name or
+    keyword.
+
+
+    **[Permissions](#permissions) required**: Any
+  operationId: getServiceDesks
+  parameters:
+    - name: start
+      in: query
+      description: >-
+        The starting index of the returned objects. Base index: 0. See the
+        [Pagination](#pagination) section for more details.
+      schema:
+        type: integer
+        format: int32
+    - name: limit
+      in: query
+      description: >-
+        The maximum number of items to return per page. Default: 100. See the
+        [Pagination](#pagination) section for more details.
+      schema:
+        type: integer
+        format: int32
+  responses:
+    '200':
+      description: Returns the service desks, on the specified page of the results.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/PagedDTOServiceDeskDTO.yaml
+          example: >-
+            {"_expands":[],"size":3,"start":3,"limit":3,"isLastPage":false,"_links":{"base":"https://your-domain.atlassian.net/rest/servicedeskapi","context":"context","next":"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk?start=6&limit=3","prev":"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk?start=0&limit=3"},"values":[{"id":"10001","projectId":"11001","projectName":"IT
+            Help
+            Desk","projectKey":"ITH","_links":{"self":"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/10001"}},{"id":"10002","projectId":"11002","projectName":"HR
+            Self Serve
+            Desk","projectKey":"HR","_links":{"self":"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/10002"}},{"id":"10003","projectId":"11003","projectName":"Foundation
+            Leave","projectKey":"FL","_links":{"self":"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/10003"}}]}
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - read:servicedesk-request
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - read:servicedesk-request
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:servicedesk:jira-service-management
+  x-atlassian-connect-scope: READ

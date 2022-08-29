@@ -1,0 +1,19 @@
+type: object
+properties:
+  addAttachment:
+    description: Action of adding attachments to a request.
+    allOf:
+      - $ref: ./CustomerRequestActionDTO.yaml
+  addComment:
+    description: Action of adding comments to a request.
+    allOf:
+      - $ref: ./CustomerRequestActionDTO.yaml
+  addParticipant:
+    description: Action of adding participants to a request.
+    allOf:
+      - $ref: ./CustomerRequestActionDTO.yaml
+  removeParticipant:
+    description: Action of removing participants from a request.
+    allOf:
+      - $ref: ./CustomerRequestActionDTO.yaml
+additionalProperties: false

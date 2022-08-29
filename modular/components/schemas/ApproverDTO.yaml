@@ -1,0 +1,14 @@
+type: object
+properties:
+  approver:
+    description: Details of the User who is providing approval.
+    allOf:
+      - $ref: ./UserDTO.yaml
+  approverDecision:
+    type: string
+    description: Decision made by the approver.
+    enum:
+      - approved
+      - declined
+      - pending
+additionalProperties: false

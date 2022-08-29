@@ -1,0 +1,9 @@
+type: object
+properties:
+  iconUrls:
+    type: object
+    additionalProperties:
+      type: string
+      format: uri
+    description: URLs for the request type icons.
+additionalProperties: false

@@ -1,0 +1,41 @@
+type: object
+properties:
+  id:
+    type: string
+    description: ID of the comment.
+  body:
+    type: string
+    description: Content of the comment.
+  renderedBody:
+    description: The rendered body of the comment.
+    allOf:
+      - $ref: ./RenderedValueDTO.yaml
+  author:
+    description: Details of the customer who authored the comment.
+    allOf:
+      - $ref: ./UserDTO.yaml
+  created:
+    description: Date the comment was created.
+    allOf:
+      - $ref: ./DateDTO.yaml
+  attachments:
+    description: List of the attachments included in the comment.
+    allOf:
+      - $ref: ./PagedDTOAttachmentDTO.yaml
+  _expands:
+    type: array
+    description: >-
+      List of items that can be expanded in the response by specifying the
+      expand query parameter.
+    items:
+      type: string
+  public:
+    type: boolean
+    description: >-
+      Indicates whether the comment is public (true) or private/internal
+      (false).
+  _links:
+    description: REST API URL link to the comment.
+    allOf:
+      - $ref: ./SelfLinkDTO.yaml
+additionalProperties: false

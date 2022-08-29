@@ -1,0 +1,94 @@
+get:
+  tags:
+    - Request
+  summary: Get customer request status
+  description: >-
+    This method returns a list of all the statuses a customer Request has
+    achieved. A status represents the state of an issue in its workflow. An
+    issue can have one active status only. The list returns the status history
+    in chronological order, most recent (current) status first.
+
+
+    **[Permissions](#permissions) required**: Permission to view the customer
+    request.
+  operationId: getCustomerRequestStatus
+  parameters:
+    - name: issueIdOrKey
+      in: path
+      description: The ID or key of the customer request to be retrieved.
+      required: true
+      schema:
+        type: string
+    - name: start
+      in: query
+      description: >-
+        The starting index of the returned objects. Base index: 0. See the
+        [Pagination](#pagination) section for more details.
+      schema:
+        type: integer
+        format: int32
+    - name: limit
+      in: query
+      description: >-
+        The maximum number of items to return per page. Default: 50. See the
+        [Pagination](#pagination) section for more details.
+      schema:
+        type: integer
+        format: int32
+  responses:
+    '200':
+      description: >-
+        Returns the customer request's status history, on the specified page of
+        the results.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/PagedDTOCustomerRequestStatusDTO.yaml
+          example: >-
+            {"_expands":[],"size":3,"start":3,"limit":3,"isLastPage":false,"_links":{"base":"https://your-domain.atlassian.net/rest/servicedeskapi","context":"context","next":"https://your-domain.atlassian.net/rest/servicedeskapi/request/1/status?start=6&limit=3","prev":"https://your-domain.atlassian.net/rest/servicedeskapi/request/1/status?start=0&limit=3"},"values":[{"status":"Waiting
+            for
+            Customer","statusDate":{"iso8601":"2015-10-08T14:05:00+0700","jira":"2015-10-08T14:05:00.000+0700","friendly":"Today
+            14:05 PM","epochMillis":1444287900000}},{"status":"Waiting for
+            Support","statusDate":{"iso8601":"2015-10-08T14:01:00+0700","jira":"2015-10-08T14:01:00.000+0700","friendly":"Today
+            14:01 PM","epochMillis":1444287660000}},{"status":"Waiting for
+            Customer","statusDate":{"iso8601":"2015-10-08T14:00:00+0700","jira":"2015-10-08T14:00:00.000+0700","friendly":"Today
+            14:00 PM","epochMillis":1444287600000}}]}
+    '401':
+      description: Returned if the user is not logged in.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '403':
+      description: Returned if the user does not have permission to complete this request.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '404':
+      description: Returned if the customer request is not found.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ErrorResponse.yaml
+  deprecated: false
+  security:
+    - OAuth2:
+        - read:servicedesk-request
+  x-atlassian-oauth2-scopes:
+    - state: Current
+      scheme: OAuth2
+      scopes:
+        - read:servicedesk-request
+    - state: Beta
+      scheme: OAuth2
+      scopes:
+        - read:request.status:jira-service-management
+        - read:user:jira
+  x-atlassian-connect-scope: READ

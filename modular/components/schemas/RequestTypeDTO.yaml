@@ -1,0 +1,53 @@
+type: object
+properties:
+  id:
+    type: string
+    description: ID for the request type.
+  name:
+    type: string
+    description: Short name for the request type.
+  description:
+    type: string
+    description: Description of the request type.
+  helpText:
+    type: string
+    description: Help text for the request type.
+  issueTypeId:
+    type: string
+    description: ID of the issue type the request type is based upon.
+  serviceDeskId:
+    type: string
+    description: ID of the service desk the request type belongs to.
+  portalId:
+    type: string
+    description: ID of the customer portal associated with the service desk project.
+  groupIds:
+    type: array
+    description: List of the request type groups the request type belongs to.
+    items:
+      type: string
+  icon:
+    description: Links to the request type's icons.
+    allOf:
+      - $ref: ./RequestTypeIconDTO.yaml
+  fields:
+    description: >-
+      Fields and additional metadata for creating a request that uses the
+      request type
+    allOf:
+      - $ref: ./CustomerRequestCreateMetaDTO.yaml
+  practice:
+    type: string
+    description: The request type's practice
+  _expands:
+    type: array
+    description: >-
+      List of items that can be expanded in the response by specifying the
+      expand query parameter.
+    items:
+      type: string
+  _links:
+    description: REST API URL for the request type.
+    allOf:
+      - $ref: ./SelfLinkDTO.yaml
+additionalProperties: false

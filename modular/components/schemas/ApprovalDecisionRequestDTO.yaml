@@ -1,0 +1,9 @@
+type: object
+properties:
+  decision:
+    type: string
+    description: Response to the approval request.
+    enum:
+      - approve
+      - decline
+additionalProperties: false
